@@ -2,12 +2,8 @@ package proyecto;
 
 public class Tablatipos {
 
-	static double[][] tabla = new double[18][18];
+	private double[][] tabla = new double[18][18];
 	
-	
-	
-		
-		
 		public Tablatipos(){
 		
 		//la tabla esta creada como la original, las filas representan el tipo del atacante y las columnas del atacado, donde el valor
@@ -62,6 +58,95 @@ public class Tablatipos {
 		tabla[15][0]=2; tabla[15][1]=1; tabla[15][2]=0.5; tabla[15][3]=1; tabla[15][4]=2; tabla[15][5]=1; tabla[15][6]=2; tabla[15][7]=1; tabla[15][8]=1; tabla[15][9]=1; tabla[15][10]=1; tabla[15][11]=0.5; tabla[15][12]=1; tabla[15][13]=2; tabla[15][14]=1; tabla[15][15]=1; tabla[15][16]=2; tabla[15][17]=0; 
 		tabla[16][0]=0; tabla[16][1]=1; tabla[16][2]=1; tabla[16][3]=1; tabla[16][4]=1; tabla[16][5]=0.5; tabla[16][6]=1; tabla[16][7]=2; tabla[16][8]=1; tabla[16][9]=1; tabla[16][10]=1; tabla[16][11]=2; tabla[16][12]=1; tabla[16][13]=0.5; tabla[16][14]=1; tabla[16][15]=0.5; tabla[16][16]=0.5; tabla[16][17]=1; 
 		tabla[17][0]=0.5; tabla[17][1]=1; tabla[17][2]=2; tabla[17][3]=1; tabla[17][4]=0.5; tabla[17][5]=1; tabla[17][6]=1; tabla[17][7]=1; tabla[17][8]=1; tabla[17][9]=2; tabla[17][10]=1; tabla[17][11]=2; tabla[17][12]=1; tabla[17][13]=0.5; tabla[17][14]=1; tabla[17][15]=1; tabla[17][16]=1; tabla[17][17]=1; 
+		
+		
 		}
-	
+
+		public double verdebilidad(String ta, Pokemon p) {
+			//debilidad que tiene el Pokemon "p" si le atacan con el ataque de tipo "ta"
+			
+			double debilidad=0;
+			int x=0; int y1=0; int y2=0;
+			int y=0;
+			int cont=0;
+			String tipo;
+			
+			String td1=p.type1;
+			String td2=p.type2;
+			
+			if(td2==" ") {
+				cont=1;
+			}else {
+				cont=2;
+			}
+			
+			switch(ta) {
+			case "Acero": x = 0; break;
+			case "Agua": x = 1; break;
+			case "Bicho": x = 2; break;
+			case "Dragón": x = 3; break;
+			case "Eléctrico": x = 4; break;
+			case "Fantasma": x = 5; break;
+			case "Fuego": x = 6; break;
+			case "Hada": x = 7; break;
+			case "Hielo": x = 8; break;
+			case "Lucha": x = 9; break;
+			case "Normal": x = 10; break;
+			case "Planta": x = 11; break;
+			case "Psíquico": x = 12; break;
+			case "Roca": x = 13; break;
+			case "Siniestro": x = 14; break;
+			case "Tierra": x = 15; break;
+			case "Veneno": x = 16; break;
+			case "Volador": x = 17; break;
+			}
+			
+			for(int i=0; i<cont; i++) {
+				
+				if(i==0) {
+					tipo=td1;
+				}else {
+					tipo=td2;
+				}
+				
+				switch(tipo) {
+				case "Acero": y = 0; break;
+				case "Agua": y = 1; break;
+				case "Bicho": y = 2; break;
+				case "Dragón": y = 3; break;
+				case "Eléctrico": y = 4; break;
+				case "Fantasma": y = 5; break;
+				case "Fuego": y = 6; break;
+				case "Hada": y = 7; break;
+				case "Hielo": y = 8; break;
+				case "Lucha": y = 9; break;
+				case "Normal": y = 10; break;
+				case "Planta": y = 11; break;
+				case "Psíquico": y = 12; break;
+				case "Roca": y = 13; break;
+				case "Siniestro": y = 14; break;
+				case "Tierra": y = 15; break;
+				case "Veneno": y = 16; break;
+				case "Volador": y = 17; break;
+				}
+				
+				if(i==0) {
+					y1=y;
+				}else {
+					y2=y;
+				}
+				
+			}
+			
+			debilidad = this.tabla[x][y1];
+			debilidad = debilidad + this.tabla[x][y2];
+			
+			if(this.tabla[x][y1]==0||this.tabla[x][y2]==0) {
+				debilidad = 0;
+			}
+			
+			return debilidad;
+			
+		}
+		
 }

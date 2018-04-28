@@ -7,16 +7,20 @@ import java.util.TimerTask;
 
 public class proyecto {
 	
-	//la experiencia ganada en combate ya es igual que el juego real,
-	/// la experiencia total de los pokemon ya es igual que en juego real
-	////el calculo de daño tambien
-	/////las estadisticas aumentan de manera random a cada nivel
 	
+	//estadisticas augmentan correctamente, se puede quemar, paralizar y envenenar y tiene efecto en las peleas
+	//el Pc es un Array de tres dimensiones, donde la primer aes la caja, la segunda son las filas y la tercera son las columnas
+	   //para moverte de caja en caja hay que ir asando hacia un lado, el llegar a la ultima caja voveras a la priemra y viceversa.
+	     // la clase healer es muy simple, solo cura completamente a los pokemon
+	//el movimiento del Entrenador(que es el personaje principal) no funciona correctamenta, ya que hay problemeas al mostrar el mapa
+	// se puede canviar de mapa pasando por los carteles (hay tres de prueba), a causa de esto, al no poder imprimir en el mapa el jugador,
+	//sino que ir poniendolo en cuanto se mueve, al empezar el juego no aparece en el mapa, pero al moverte por primera vez ya funciona correctamente.
 	
+	static Pc pcpokemon = new Pc();
 	// se puede combatir, se puede curar en combate, se puede capturar el enemigo
 	///se puede cambiar de pokemon en combate o intentar huir
 	//// se pueden guardar y sacar pokemon del pc 
-	               //(el pc tiene un maximo de 500 pokemon pero solo se mostraran los 36 primeros de momento)
+	            
 	////// se puede curar el equipo en el healer
 	////////
 	
@@ -24,13 +28,16 @@ public class proyecto {
 	//// c para interactuar (en el equipo se cambia el pokemon seleccionado a la primera posicion)
 	////// e para volver al menu anterior (en caso de estar en el mapa abre el equipo)     
 	
+	static Entrenador personaje = new Entrenador(2);
+	
+	
 	static int vidapoke=0;
 	static int vidasalvaje=0;
 	
 	static int vidamaxpoke=0;
 	static int vidamaxsalvaje=0;
 	
-static Scanner sc = new Scanner(System.in);
+	static Scanner sc = new Scanner(System.in);
 
 	static boolean fin=true;
 	static boolean mapa1=true;
@@ -53,7 +60,7 @@ static Scanner sc = new Scanner(System.in);
 							 // al sacar pokemon del pc o al capturar
 	
 	//array del pc, y del menu del pc
-	static Pokemon[] pc = new Pokemon[500];
+	
 	static int[][] menupc = new int[2][2];
 	static String menupcv="";
 	
@@ -90,6 +97,10 @@ static Scanner sc = new Scanner(System.in);
 	//posicion en el menu del pc, como es una array vertical solo tiene una variable de posicion
 	static int posmenupci = 0;
 	
+	static int pcx=0;
+	static int pcy=0;
+	static int cajapc=0;
+	
 	//posicion en el menu del combate
 	static int poshudi=0;
 	static int poshudj=1;
@@ -105,7 +116,7 @@ static Scanner sc = new Scanner(System.in);
 	static Finestra f = new Finestra(t, t2);
 	
 	// variable para cambiar de menu, etc en el timer
-	static int estado=0; 
+	//static int estado=0; 
 	/* 
 	 * 0= mundo, 
 	 * 1= menu combate, 
@@ -154,7 +165,7 @@ static Scanner sc = new Scanner(System.in);
 	//posicion en el lo que se mustra del pc
 	///posicion real en el array del pc
 	
-	static int posicionpc = 0;
+	
 	
 	static int possacari=0;
 	static int possacarj=0;
@@ -171,6 +182,8 @@ static Scanner sc = new Scanner(System.in);
 	
 	static int contadorcaptura=0;
 	/////////////////////////
+	static int nummap=0;
+	static Mapa map = new Mapa(nummap);
 	
 	public static void main(String[] args) {
 
@@ -211,7 +224,6 @@ static Scanner sc = new Scanner(System.in);
 		t2.setActimgbackground(true);
 		/////
 		
-
 		Timer timer = new Timer();
 	    timer.schedule(new TimerTask() {
 
@@ -221,6 +233,9 @@ static Scanner sc = new Scanner(System.in);
 	        }
 
 	    }, 0, 500);
+	    
+	    // para no complicarme la vida igualo el array antigua del equipo al equipo del Entrenador
+	    equipo = personaje.equipo;
 	    
 	  ////array fotos pps
 		int pps=78;
@@ -262,149 +277,28 @@ static Scanner sc = new Scanner(System.in);
 			}
 		}
 		
-		for(int i=0; i<500; i++) {
-			int np=160;
-			String no = " ";
-			String ty1=" "; String ty2=" ";
-			int nl=0; 
-			int h=0; int mh=0;
-			int ex=0; int mex=0;
-			int at=0; int sat=0;
-			int de=0; int sde=0;
-			int ve=0; 
-			String n1=" "; String n2=" "; String n3=" "; String n4=" ";  
-			String t1=" "; String t2=" "; String t3=" "; String t4=" ";  
-			int ac1=0; int ac2=0; int ac3=0; int ac4=0;
-			int pw1=0; int pw2=0; int pw3=0; int pw4=0;
-			int pp1=0; int pp2=0; int pp3=0; int pp4=0;
-			int mpp1=0; int mpp2=0; int mpp3=0; int mpp4=0;
-			int cty1=3; int cty2=3; int cty3=3; int cty4=3; 
-			pc[i] = new Pokemon(np, no, ty1, ty2, nl, mh, h, ex, mex, at, sat, de, sde, ve, n1, n2, n3, n4, t1, t2, t3, t4, ac1, ac2, ac3, ac4, pw1, pw2, pw3, pw4, pp1, pp2, pp3, pp4, mpp1, mpp2, mpp3, mpp4, cty1, cty2, cty3, cty4);
-			
-		}
-		
-		for(int i=0; i<6; i++) {
-			if(i==0) {
-				int np=0;
-				String no = "Pikachu";
-				String ty1="Eléctrico"; String ty2=" ";
-				int nl=1; 
-				int h=100; int mh=h;
-				int ex=0; int mex=0;
-				for(int j=0; j<2; j++) {
-					mex = mex + (nl*nl);  
+		for(int i=0; i<10; i++) {
+			for(int j=0; j<6; j++) {
+				for(int k=0; k<6; k++) {
+					pcpokemon.pc[i][j][k].npokedex=160;
 				}
-				
-				int at=20; int sat=20;
-				int de=12; int sde=13;
-				int ve=14; 
-				String n1="Rayo"; String n2="Placaje"; String n3="Placaje"; String n4=" ";  
-				String t1="Eléctrico"; String t2="Normal"; String t3="Normal"; String t4=" ";  
-				int ac1=20; int ac2=20; int ac3=20; int ac4=0;
-				int pw1=20; int pw2=20; int pw3=20; int pw4=0;
-				int pp1=35; int pp2=35; int pp3=35; int pp4=0;
-				int mpp1=35; int mpp2=35; int mpp3=35; int mpp4=0;
-				int cty1=1; int cty2=0; int cty3=0; int cty4=3; 
-				equipo[i] = new Pokemon(np, no, ty1, ty2, nl, mh, h, ex, mex, at, sat, de, sde, ve, n1, n2, n3, n4, t1, t2, t3, t4, ac1, ac2, ac3, ac4, pw1, pw2, pw3, pw4, pp1, pp2, pp3, pp4, mpp1, mpp2, mpp3, mpp4, cty1, cty2, cty3, cty4);
-				
-			} else {
-				if(i==1) {
-					int np=1;
-					String no = "Pidgey";
-					String ty1="Normal"; String ty2="Volador";
-					int nl=7; 
-					int h=40; int mh=h;
-					int ex=0; int mex=0;
-					for(int j=0; j<2; j++) {
-						mex = mex + (nl*nl);  
-					}
-					int at=20; int sat=11;
-					int de=12; int sde=13;
-					int ve=14; 
-					String n1="Picotazo"; String n2="Placaje"; String n3=" "; String n4=" ";  
-					String t1="Volador"; String t2="Normal"; String t3=" "; String t4=" ";  
-					int ac1=20; int ac2=20; int ac3=20; int ac4=20;
-					int pw1=20; int pw2=20; int pw3=20; int pw4=20;
-					int pp1=20; int pp2=20; int pp3=20; int pp4=20;
-					int mpp1=20; int mpp2=20; int mpp3=20; int mpp4=20;
-					int cty1=0; int cty2=0; int cty3=3; int cty4=3;
-					equipo[i] = new Pokemon(np, no, ty1, ty2, nl, mh, h, ex, mex, at, sat, de, sde, ve, n1, n2, n3, n4, t1, t2, t3, t4, ac1, ac2, ac3, ac4, pw1, pw2, pw3, pw4, pp1, pp2, pp3, pp4, mpp1, mpp2, mpp3, mpp4, cty1, cty2, cty3, cty4);
-					
-				}else {
-				int np2=160;
-				String no2 = " ";
-				String ty12=" "; String ty22=" ";
-				int nl2=0; 
-				int h2=0; int mh2=0;
-				int ex2=0; int mex2=0;
-				int at2=0; int sat2=0;
-				int de2=0; int sde2=0;
-				int ve2=0; 
-				String n12=" "; String n22=" "; String n32=" "; String n42=" ";  
-				String t12=" "; String t22=" "; String t32=" "; String t42=" ";  
-				int ac12=0; int ac22=0; int ac32=0; int ac42=0;
-				int pw12=0; int pw22=0; int pw32=0; int pw42=0;
-				int pp12=0; int pp22=0; int pp32=0; int pp42=0;
-				int mpp12=0; int mpp22=0; int mpp32=0; int mpp42=0;
-				int cty1=3; int cty2=3; int cty3=3; int cty4=3;
-				equipo[i] = new Pokemon(np2, no2, ty12, ty22, nl2, mh2, h2, ex2, mex2, at2, sat2, de2, sde2, ve2, n12, n22, n32, n42, t12, t22, t32, t42, ac12, ac22, ac32, ac42, pw12, pw22, pw32, pw42, pp12, pp22, pp32, pp42, mpp12, mpp22, mpp32, mpp42, cty1, cty2, cty3, cty4);
-				
-			}}
+			}
 		}
 			
-		
-		if(mapa1==true) {
-			
-			for(int i=0; i<18; i++) {
-				for(int j=0; j<18; j++) {
-					mapa[i][j]=28;
-				}
-			}
-			
-			for(int i=0; i<18; i++) {
-				for(int j=0; j<18; j++) {
-					if(i==0||i==1||i==2||i==16||i==15||i==17||j==0||j==1||j==17||j==15||j==2||j==16) {
-						mapa[i][j]=7;
-					} else {
-						if((i==8||i==7||i==6)) {
-							mapa[i][j]=2;
-						} else {
-							mapa[i][j]=28;
-						}	
-					}
-				}
-			}
-			
-			mapa[posi][posj]=1;
-			mapa[4][7]=5;
-			mapa[4][8]=6;
-			mapa[6][4]=28; mapa[6][3]=28; mapa[6][13]=28; mapa[6][14]=28;
-			mapa[7][4]=28; mapa[7][3]=28; mapa[7][13]=28; mapa[7][14]=28;
-			mapa[8][4]=28; mapa[8][3]=28; mapa[8][13]=28; mapa[8][14]=28;
-			mapa[12][6]=11; mapa[12][7]=11; mapa[12][8]=11; mapa[12][9]=11; mapa[12][10]=11; mapa[12][11]=11; 
-			 
-			
-			for(int i=0; i<18; i++) {
-				for(int j=0; j<18; j++) {
-					mapav = mapav + mapa[i][j];
-				}mapav = mapav + "\n";
-			}
-			
-			}
 	
 	}
 	
 	private static void doStuff() {
 		
-		
-		switch(estado) {
+		switch(personaje.estado) {
 		case 0: //el mapa principal
 			mundo();
 			break;
 		case 1: //menu de combate
 			numpoke=1;
 			for(int i=0; i<6; i++) {
-				if(equipo[i].hp>0) {
+				
+				if(equipo[i].estado!=0) {
 					numpoke++;
 				}
 			}
@@ -488,14 +382,13 @@ static Scanner sc = new Scanner(System.in);
 		System.out.println(enemigo.hp);
 		
 		if(vidamaxsalvaje<=vidasalvaje&&enemigo.hp<=0) {
-			System.out.println("acabar");
+			enemigo.estado=0;
 			combates=false;
 			boolean derrota = false;
 			fincombate(derrota, enemigo);
-			estado=0;
+			personaje.estado=0;
 		}else if(vidamaxsalvaje<=vidasalvaje&&enemigo.hp>0) {
-			System.out.println("seguir");
-				estado=1;
+			personaje.estado=1;
 			}
 		
 		
@@ -504,9 +397,10 @@ static Scanner sc = new Scanner(System.in);
 
 	private static void mundo(){
 		
+
 		
 		contador=0;
-		mapav="";
+		/*mapav="";
 		mapamov[0][0]=mapa[posi-3][posj-3]; mapamov[0][1]=mapa[posi-3][posj-2]; mapamov[0][2]=mapa[posi-3][posj-1]; mapamov[0][3]=mapa[posi-3][posj]; mapamov[0][4]=mapa[posi-3][posj+1]; mapamov[0][5]=mapa[posi-3][posj+2]; mapamov[0][6]=mapa[posi-3][posj+3];
 		mapamov[1][0]=mapa[posi-2][posj-3]; mapamov[1][1]=mapa[posi-2][posj-2]; mapamov[1][2]=mapa[posi-2][posj-1]; mapamov[1][3]=mapa[posi-2][posj]; mapamov[1][4]=mapa[posi-2][posj+1]; mapamov[1][5]=mapa[posi-2][posj+2]; mapamov[1][6]=mapa[posi-2][posj+3]; 
 		mapamov[2][0]=mapa[posi-1][posj-3]; mapamov[2][1]=mapa[posi-1][posj-2]; mapamov[2][2]=mapa[posi-1][posj-1]; mapamov[2][3]=mapa[posi-1][posj]; mapamov[2][4]=mapa[posi-1][posj+1]; mapamov[2][5]=mapa[posi-1][posj+2]; mapamov[2][6]=mapa[posi-1][posj+3];
@@ -515,12 +409,13 @@ static Scanner sc = new Scanner(System.in);
 		mapamov[5][0]=mapa[posi+2][posj-3]; mapamov[5][1]=mapa[posi+2][posj-2]; mapamov[5][2]=mapa[posi+2][posj-1]; mapamov[5][3]=mapa[posi+2][posj]; mapamov[5][4]=mapa[posi+2][posj+1]; mapamov[5][5]=mapa[posi+2][posj+2]; mapamov[5][6]=mapa[posi+2][posj+3];
 		mapamov[6][0]=mapa[posi+3][posj-3]; mapamov[6][1]=mapa[posi+3][posj-2]; mapamov[6][2]=mapa[posi+3][posj-1]; mapamov[6][3]=mapa[posi+3][posj]; mapamov[6][4]=mapa[posi+3][posj+1]; mapamov[6][5]=mapa[posi+3][posj+2]; mapamov[6][6]=mapa[posi+3][posj+3];
 		
+		mapamovv="";
 		for(int i=0; i<7; i++) {
 			for(int j=0; j<7; j++) {
 				mapamovv = mapamovv + mapamov[i][j];
 			}
 		}
-		
+		*/
 		for(int i=0; i<3; i++) {
 			for(int j=0; j<3; j++) {
 				segundapantalla[i][j]=28;
@@ -547,59 +442,116 @@ static Scanner sc = new Scanner(System.in);
 			}
 		}
 		
+		// crea el mapa con la clase Mapa
+		
+		int[][] mapamundo = map.craermapa(posi, posj, nummap);
+		
+		String mapamundov = map.mostrarmapa(mapamundo);
+		
 		t.setImgbackground("background.jpg");
 		t2.setImgbackground("backgroundopcion.jpg");
-		t.dibuixa(mapamov);
+		t.dibuixa(mapamundo);
 		t2.dibuixa(segundapantalla);
 		t.overdibuixa(matriuover);
-		System.out.println(mapamovv);
+		System.out.println(mapamundov);
 		System.out.println(segundapantallav);
-		System.out.println(matriuoverv);
 		
 		char movimiento = f.getActualChar();
+		char mov = f.getUltimChar();
+		
+		//personaje.movimiento(movimiento, map, nummap, posi, posj, mov);
 		
 			switch(movimiento) {
 			case 'w': case 'W': case 's': case 'S': case 'a': case 'A': case 'd': case 'D':
-				movimiento(movimiento);
+				movimiento(movimiento, map);
+				
 				break;
 			case 'c': case 'C':
 				accion();
 				break;
 			case 'e': case 'E':
-				estado=4;// equipo
+				personaje.estado=4;// equipo
 				break;
 			}
 			numpoke=0;
-		 
-		if(combates==true&&estado==0) {
+		 System.out.println("mundo");
+		if(combates==true&&personaje.estado==0) {
 			numpociones=10;
 			enemigo =salvaje();
 			poshudi=0; poshudj=1;
-			estado=1; //combate
+			personaje.estado=1; //combate
 		}
-			
 		
 	}
 	
-	private static void movimiento(char movimiento) {
+	private static void movimiento(char movimiento, Mapa map) {
 		// redirección del movimiento en las cuatro direcciones
 		
+		int num1 = nummap;
+		
+		switch(nummap) {
+		case 0:
+			switch(f.getUltimChar()) {
+			case 'd': case 'D':
+				if(map.mapas[nummap][posi][posj+1]==4) {
+					nummap++;
+					map.mapas[nummap][posi][posj]=28;
+					map = new Mapa(nummap);
+					posi = 4; posj = 3;
+					auxp=28;
+					map.mapas[nummap][posi][posj]=9;
+				}
+				break;
+			}
+			break;
+		case 1:
+			switch(f.getUltimChar()) {
+			case 'a': case 'A':
+				if(map.mapas[nummap][posi][posj-1]==4) {
+					nummap--;
+					map.mapas[nummap][posi][posj]=28;
+					map = new Mapa(nummap);
+					posi = 5; posj = 14;
+					auxp=28;
+					map.mapas[nummap][4][4]=28;
+					map.mapas[nummap][posi][posj]=8;
+				}
+				break;
+			case 'd': case 'D':
+				if(map.mapas[nummap][posi][posj+1]==4) {
+					nummap++;
+					map.mapas[nummap][posi][posj]=28;
+					map = new Mapa(nummap);
+					posi = 4; posj = 3;
+					auxp=28;
+					map.mapas[nummap][posi][posj]=9;
+				}
+				break;
+			}
+			break;
+		}
+		
+		int num2 = nummap;
+		
+		if(num1==num2) {
+			
+		
 		if(movimiento=='w'||movimiento=='W') {
-			if(mapa[posi-1][posj]==7||mapa[posi-1][posj]==5||mapa[posi-1][posj]==6||mapa[posi-1][posj]==11) {
-				mapa[posi][posj]=10;
+			if(map.mapas[nummap][posi-1][posj]==7||map.mapas[nummap][posi-1][posj]==5||map.mapas[nummap][posi-1][posj]==6||map.mapas[nummap][posi-1][posj]==11) {
+				map.mapas[nummap][posi][posj]=10;
 			}else {
-				if(mapa[posi-1][posj]==2) {
-					mapa[posi][posj]=auxp;
-					auxp=mapa[posi-1][posj];
-					mapa[posi-1][posj]=42;
+				if(map.mapas[nummap][posi-1][posj]==2) {
+					map.mapas[nummap][posi][posj]=auxp;
+					auxp=map.mapas[nummap][posi-1][posj];
+					map.mapas[nummap][posi-1][posj]=42;
 					posi--;
 				}else {
-					mapa[posi][posj]=auxp;
-					auxp=mapa[posi-1][posj];
-					mapa[posi-1][posj]=10;
+					map.mapas[nummap][posi][posj]=auxp;
+					auxp=map.mapas[nummap][posi-1][posj];
+					map.mapas[nummap][posi-1][posj]=10;
 					posi--;
 				}
-				if(mapa[posi][posj]==39||mapa[posi][posj]==40||mapa[posi][posj]==41||mapa[posi][posj]==42) {
+				if(map.mapas[nummap][posi][posj]==39||map.mapas[nummap][posi][posj]==40||map.mapas[nummap][posi][posj]==41||map.mapas[nummap][posi][posj]==42) {
 					int random = (int) (Math.random()*5);
 					if(random%2==0&&equipo[0].hp>0) {
 						combates=true;
@@ -608,27 +560,27 @@ static Scanner sc = new Scanner(System.in);
 			}
 		}
 		if(movimiento=='s'||movimiento=='S') {
-			if(mapa[posi+1][posj]==7||mapa[posi+1][posj]==6||mapa[posi+1][posj]==5) {
-				mapa[posi][posj]=1;	
+			if(map.mapas[nummap][posi+1][posj]==7||map.mapas[nummap][posi+1][posj]==6||map.mapas[nummap][posi+1][posj]==5) {
+				map.mapas[nummap][posi][posj]=1;	
 				}else {
-					if(mapa[posi+1][posj]==11) {
-						mapa[posi][posj]=auxp;
-						auxp=mapa[posi+2][posj];
-						mapa[posi+2][posj]=1;
+					if(map.mapas[nummap][posi+1][posj]==11) {
+						map.mapas[nummap][posi][posj]=auxp;
+						auxp=map.mapas[nummap][posi+2][posj];
+						map.mapas[nummap][posi+2][posj]=1;
 						posi=posi+2;
 					}else {
-						if(mapa[posi+1][posj]==2) {
-							mapa[posi][posj]=auxp;
-							auxp=mapa[posi+1][posj];
-							mapa[posi+1][posj]=39;
+						if(map.mapas[nummap][posi+1][posj]==2) {
+							map.mapas[nummap][posi][posj]=auxp;
+							auxp=map.mapas[nummap][posi+1][posj];
+							map.mapas[nummap][posi+1][posj]=39;
 							posi++;
 						}else {
-							mapa[posi][posj]=auxp;
-							auxp=mapa[posi+1][posj];
-							mapa[posi+1][posj]=1;
+							map.mapas[nummap][posi][posj]=auxp;
+							auxp=map.mapas[nummap][posi+1][posj];
+							map.mapas[nummap][posi+1][posj]=1;
 							posi++;
 						}
-						if(mapa[posi][posj]==39||mapa[posi][posj]==40||mapa[posi][posj]==41||mapa[posi][posj]==42) {
+						if(map.mapas[nummap][posi][posj]==39||map.mapas[nummap][posi][posj]==40||map.mapas[nummap][posi][posj]==41||map.mapas[nummap][posi][posj]==42) {
 							int random = (int) (Math.random()*5);
 							if(random%2==0&&equipo[0].hp>0) {
 								combates=true;
@@ -637,21 +589,21 @@ static Scanner sc = new Scanner(System.in);
 					}}
 		}
 		if(movimiento=='a'||movimiento=='A') {
-			if(mapa[posi][posj-1]==7||mapa[posi][posj-1]==5||mapa[posi][posj-1]==6||mapa[posi][posj-1]==11) {
-				mapa[posi][posj]=8;	
+			if(map.mapas[nummap][posi][posj-1]==7||map.mapas[nummap][posi][posj-1]==5||map.mapas[nummap][posi][posj-1]==6||map.mapas[nummap][posi][posj-1]==11) {
+				map.mapas[nummap][posi][posj]=8;	
 				}else {
-					if(mapa[posi][posj-1]==2) {
-						mapa[posi][posj]=auxp;
-						auxp=mapa[posi][posj-1];
-						mapa[posi][posj-1]=40;
+					if(map.mapas[nummap][posi][posj-1]==2) {
+						map.mapas[nummap][posi][posj]=auxp;
+						auxp=map.mapas[nummap][posi][posj-1];
+						map.mapas[nummap][posi][posj-1]=40;
 						posj--;
 					}else {
-						mapa[posi][posj]=auxp;
-						auxp=mapa[posi][posj-1];
-						mapa[posi][posj-1]=8;
+						map.mapas[nummap][posi][posj]=auxp;
+						auxp=map.mapas[nummap][posi][posj-1];
+						map.mapas[nummap][posi][posj-1]=8;
 						posj--;
 					}
-					if(mapa[posi][posj]==39||mapa[posi][posj]==40||mapa[posi][posj]==41||mapa[posi][posj]==42) {
+					if(map.mapas[nummap][posi][posj]==39||map.mapas[nummap][posi][posj]==40||map.mapas[nummap][posi][posj]==41||map.mapas[nummap][posi][posj]==42) {
 						int random = (int) (Math.random()*5);
 						if(random%2==0&&equipo[0].hp>0) {
 							combates=true;
@@ -660,21 +612,22 @@ static Scanner sc = new Scanner(System.in);
 				}
 		}
 		if(movimiento=='d'||movimiento=='D') {
-			if(mapa[posi][posj+1]==7||mapa[posi][posj+1]==6||mapa[posi][posj+1]==5||mapa[posi][posj+1]==11) {
-				mapa[posi][posj]=9;
+			if(map.mapas[nummap][posi][posj+1]==7||map.mapas[nummap][posi][posj+1]==6||map.mapas[nummap][posi][posj+1]==5||map.mapas[nummap][posi][posj+1]==11) {
+				map.mapas[nummap][posi][posj]=9;
 			}else {
-				if(mapa[posi][posj+1]==2) {
-					mapa[posi][posj]=auxp;
-					auxp=mapa[posi][posj+1];
-					mapa[posi][posj+1]=41;
-					posj++;
+				
+				 if(map.mapas[nummap][posi][posj+1]==2) {
+						map.mapas[nummap][posi][posj]=auxp;
+						auxp=map.mapas[nummap][posi][posj+1];
+						map.mapas[nummap][posi][posj+1]=41;
+						posj++;
 				}else {
-					mapa[posi][posj]=auxp;
-					auxp=mapa[posi][posj+1];
-					mapa[posi][posj+1]=9;
+					map.mapas[nummap][posi][posj]=auxp;
+					auxp=map.mapas[nummap][posi][posj+1];
+					map.mapas[nummap][posi][posj+1]=9;
 					posj++;
 				}
-				if(mapa[posi][posj]==39||mapa[posi][posj]==40||mapa[posi][posj]==41||mapa[posi][posj]==42) {
+				if(map.mapas[nummap][posi][posj]==39||map.mapas[nummap][posi][posj]==40||map.mapas[nummap][posi][posj]==41||map.mapas[nummap][posi][posj]==42) {
 					int random = (int) (Math.random()*5);
 					if(random%2==0&&equipo[0].hp>0) {
 						combates=true;
@@ -682,51 +635,52 @@ static Scanner sc = new Scanner(System.in);
 				}
 			}
 		}
+		
+		}
+		
+		
+		
 	}
 	
 	private static void accion() {
 		// diferentes opciones al pulsar la "c", como curar, o acceder al pc
 		
-		if((mapa[posi+1][posj]==6&&mapa[posi][posj]==1)||(mapa[posi-1][posj]==6&&mapa[posi][posj]==10)||(mapa[posi][posj+1]==6&&mapa[posi][posj]==9)||(mapa[posi][posj-1]==6&&mapa[posi][posj]==8)) {
+		if((map.mapas[nummap][posi+1][posj]==6&&map.mapas[nummap][posi][posj]==1)||(map.mapas[nummap][posi-1][posj]==6&&map.mapas[nummap][posi][posj]==10)||(map.mapas[nummap][posi][posj+1]==6&&map.mapas[nummap][posi][posj]==9)||(map.mapas[nummap][posi][posj-1]==6&&map.mapas[nummap][posi][posj]==8)) {
 			
 			//mira la posicion del healer para saber donde modificarlo a la hora de curar
 			
-			if((mapa[posi+1][posj]==6&&mapa[posi][posj]==1)){
+			if((map.mapas[nummap][posi+1][posj]==6&&map.mapas[nummap][posi][posj]==1)){
 				healerx=posi+1;
 				healery=posj;
 			}
 			
-			if((mapa[posi-1][posj]==6&&mapa[posi][posj]==10)) {
+			if((map.mapas[nummap][posi-1][posj]==6&&map.mapas[nummap][posi][posj]==10)) {
 				healerx=posi-1;
 				healery=posj;
 			}
 			
-			if((mapa[posi][posj+1]==6&&mapa[posi][posj]==9)) {
+			if((map.mapas[nummap][posi][posj+1]==6&&map.mapas[nummap][posi][posj]==9)) {
 				healerx=posi;
 				healery=posj+1;
 			}
 			
-			if((mapa[posi][posj-1]==6&&mapa[posi][posj]==8)) {
+			if((map.mapas[nummap][posi][posj-1]==6&&map.mapas[nummap][posi][posj]==8)) {
 				healerx=posi;
 				healery=posj-1;
 			}
 			
-			//reestablece vida y pps de los ataques de todo el equipo
 			
-			for(int i=0; i<6; i++) {
-				equipo[i].hp=equipo[i].maxhp;
-				equipo[i].a1pp=equipo[0].a1maxpp;
-				equipo[i].a2pp=equipo[0].a2maxpp;
-				equipo[i].a3pp=equipo[0].a3maxpp;
-				equipo[i].a4pp=equipo[0].a4maxpp;
-			}
 			
-			estado=7;//healer
+			Healer h = new Healer();
+			//reestablece vida y pps de los ataques del array de Pokemon que le pasas
+			h.healer(equipo);
+			
+			personaje.estado=7;//healer
 		
 		} else {
-			if(mapa[posi-1][posj]==5&&mapa[posi][posj]==10) {
+			if(map.mapas[nummap][posi-1][posj]==5&&map.mapas[nummap][posi][posj]==10) {
 				posmenupci=0;
-				estado=9; // menu del pc
+				personaje.estado=9; // menu del pc
 			}
 		}
 		
@@ -736,177 +690,23 @@ static Scanner sc = new Scanner(System.in);
 		// genera el pokemon salvaje
 		
 		Pokemon salvaje = new Pokemon();
-		salvaje.npokedex = (int) ((Math.random())*3);
-		switch(salvaje.npokedex) {
+		int numsalvaje = (int) ((Math.random())*3);
+		switch(numsalvaje) {
 		
 		case 0:  //pikachu
 			
-			salvaje.nivel = (int) (4 + Math.random()*5);
-			salvaje.hp = 10;
-			salvaje.atk = 5;
-			salvaje.satk = 5;
-			salvaje.def = 5;
-			salvaje.sdef = 5;
-			salvaje.spd = 5;
+			salvaje = new Pokemon("Pikachu");
 			
-			for(int i=0; i<salvaje.nivel; i++) {
-				salvaje.hp = (int) (salvaje.hp + 5 + Math.random()*5);
-				salvaje.atk = (int) (salvaje.atk + Math.random()*3);
-				salvaje.satk =(int) (salvaje.satk + Math.random()*3);
-				salvaje.def = (int) (salvaje.def + Math.random()*3);
-				salvaje.sdef = (int) (salvaje.sdef + Math.random()*3);
-				salvaje.spd = (int) (salvaje.spd + Math.random()*3);
-			}
-			
-			for(int i=0; i<2; i++) {
-				salvaje.totexp = salvaje.totexp + (salvaje.nivel*salvaje.nivel);  
-			}
-			
-			salvaje.maxhp = salvaje.hp;
-			salvaje.exp = 0;
-			salvaje.nombre = "Pikachu";
-			salvaje.type1 = "Eléctrico";
-			salvaje.type2 = " ";
-			salvaje.a1name = "Impactrueno";
-			salvaje.a1type = "Eléctrico";
-			salvaje.a1pwr = 40;
-			salvaje.a1acc = 100;
-			salvaje.a1maxpp = 20;
-			salvaje.a1pp = salvaje.a1maxpp;
-			salvaje.a1cty = 1;
-			salvaje.a2name = "Placaje";
-			salvaje.a2type = "Eléctrico";
-			salvaje.a2pwr = 40;
-			salvaje.a2acc = 100;
-			salvaje.a2maxpp = 20;
-			salvaje.a2pp = salvaje.a1maxpp; 
-			salvaje.a2cty = 1;
-			salvaje.a3name = "Gruñido";
-			salvaje.a3type = "Eléctrico";
-			salvaje.a3pwr = 40;
-			salvaje.a3acc = 100;
-			salvaje.a3maxpp = 20;
-			salvaje.a3pp = salvaje.a1maxpp;
-			salvaje.a3cty = 1;
-			salvaje.a4name = "Rayo";
-			salvaje.a4type = "Eléctrico";
-			salvaje.a4pwr = 40;
-			salvaje.a4acc = 100;
-			salvaje.a4maxpp = 20;
-			salvaje.a4pp = salvaje.a1maxpp; 
-			salvaje.a4cty = 1;
 			break;
 		case 1:  //pidgey
-			salvaje.nivel = (int) (4 + Math.random()*5);
-			salvaje.hp = 10;
-			salvaje.atk = 5;
-			salvaje.satk = 5;
-			salvaje.def = 5;
-			salvaje.sdef = 5;
-			salvaje.spd = 5;
 			
-			for(int i=0; i<salvaje.nivel; i++) {
-				salvaje.hp = (int) (salvaje.hp + 5 + Math.random()*5);
-				salvaje.atk = (int) (salvaje.atk + Math.random()*3);
-				salvaje.satk =(int) (salvaje.satk + Math.random()*3);
-				salvaje.def = (int) (salvaje.def + Math.random()*3);
-				salvaje.sdef = (int) (salvaje.sdef + Math.random()*3);
-				salvaje.spd = (int) (salvaje.spd + Math.random()*3);
-			}
+			salvaje = new Pokemon("Pidgey");
 			
-			for(int i=0; i<2; i++) {
-				salvaje.totexp = salvaje.totexp + (salvaje.nivel*salvaje.nivel);  
-			}
-			
-			salvaje.maxhp = salvaje.hp;
-			salvaje.exp = 0;
-			salvaje.nombre = "Pidgey";
-			salvaje.type1 = "Normal";
-			salvaje.type2 = "Volador";
-			salvaje.a1name = "Placaje";
-			salvaje.a1type = "Normal";
-			salvaje.a1pwr = 40;
-			salvaje.a1acc = 100;
-			salvaje.a1maxpp = 20;
-			salvaje.a1pp = salvaje.a1maxpp;
-			salvaje.a1cty = 1;
-			salvaje.a2name = "Gruñido";
-			salvaje.a2type = "Normal";
-			salvaje.a2pwr = 40;
-			salvaje.a2acc = 100;
-			salvaje.a2maxpp = 20;
-			salvaje.a2pp = salvaje.a1maxpp; 
-			salvaje.a2cty = 1;
-			salvaje.a3name = "Ataque ala";
-			salvaje.a3type = "Volador";
-			salvaje.a3pwr = 40;
-			salvaje.a3acc = 100;
-			salvaje.a3maxpp = 20;
-			salvaje.a3pp = salvaje.a1maxpp; 
-			salvaje.a3cty = 1;
-			salvaje.a4name = "Picotazo";
-			salvaje.a4type = "Volador";
-			salvaje.a4pwr = 40;
-			salvaje.a4acc = 100;
-			salvaje.a4maxpp = 20;
-			salvaje.a4pp = salvaje.a1maxpp;
-			salvaje.a4cty = 1;
 			break;
 		case 2:  //growlithe
-			salvaje.nivel = (int) (4 + Math.random()*5);
-			salvaje.hp = 10;
-			salvaje.atk = 5;
-			salvaje.satk = 5;
-			salvaje.def = 5;
-			salvaje.sdef = 5;
-			salvaje.spd = 5;
 			
-			for(int i=0; i<salvaje.nivel; i++) {
-				salvaje.hp = (int) (salvaje.hp + 5 + Math.random()*5);
-				salvaje.atk = (int) (salvaje.atk + Math.random()*3);
-				salvaje.satk =(int) (salvaje.satk + Math.random()*3);
-				salvaje.def = (int) (salvaje.def + Math.random()*3);
-				salvaje.sdef = (int) (salvaje.sdef + Math.random()*3);
-				salvaje.spd = (int) (salvaje.spd + Math.random()*3);
-			}
+			salvaje = new Pokemon("Growlithe");
 			
-			for(int i=0; i<2; i++) {
-				salvaje.totexp = salvaje.totexp + (salvaje.nivel*salvaje.nivel);  
-			}
-			
-			salvaje.maxhp = salvaje.hp;
-			salvaje.exp = 0;
-			salvaje.nombre = "Growlithe";
-			salvaje.type1 = "Fuego";
-			salvaje.type2 = " ";
-			salvaje.a1name = "Placaje";
-			salvaje.a1type = "Normal";
-			salvaje.a1pwr = 40;
-			salvaje.a1acc = 100;
-			salvaje.a1maxpp = 20;
-			salvaje.a1pp = salvaje.a1maxpp;
-			salvaje.a1cty = 1;
-			salvaje.a2name = "Gruñido";
-			salvaje.a2type = "Normal";
-			salvaje.a2pwr = 40;
-			salvaje.a2acc = 100;
-			salvaje.a2maxpp = 20;
-			salvaje.a2pp = salvaje.a1maxpp; 
-			salvaje.a2cty = 1;
-			salvaje.a3name = "Ascuas";
-			salvaje.a3type = "Fuego";
-			salvaje.a3pwr = 40;
-			salvaje.a3acc = 100;
-			salvaje.a3maxpp = 20;
-			salvaje.a3pp = salvaje.a1maxpp; 
-			salvaje.a3cty = 1;
-			salvaje.a4name = " ";
-			salvaje.a4type = " ";
-			salvaje.a4pwr = 0;
-			salvaje.a4acc = 0;
-			salvaje.a4maxpp = 0;
-			salvaje.a4pp = salvaje.a1maxpp; 
-			salvaje.a4cty = 1;
 			break;
 		}
 		return salvaje;
@@ -932,7 +732,7 @@ static Scanner sc = new Scanner(System.in);
 		case 1: // pidgey
 			combate2[0][2]=31;
 			break;
-		case 2: //growlithe
+		case 2: // growlithe
 			combate2[0][2]=32;
 			break;
 		}
@@ -1013,14 +813,20 @@ static Scanner sc = new Scanner(System.in);
 				t2.setImgbackground("combateequipo2.jpg");
 			}
 			
+			numpoke=0;
+			for(int i=0; i<6; i++) {
+				if(equipo[i].hp<=0) {
+					numpoke++;
+				}
+			}
+			
 			//calcula el numero de pokemons usables
 			if(equipo[0].hp<=0) {
-				equipo[0].hp=0;
-				numpoke--;
+				equipo[0].debilitado();
 				if(numpoke>0) {
-					estado=4; // equipo
+					personaje.estado=4; // equipo
 				}else {
-					estado=0; //mundo
+					personaje.estado=0; //mundo
 				}
 			}
 			
@@ -1128,14 +934,14 @@ static Scanner sc = new Scanner(System.in);
 				if(poshudi==0) {
 					
 					// caso que no queden pps en ningun ataque
-					if(equipo[0].a1pp==0&&equipo[0].a2pp==0&&equipo[0].a3pp==0&&equipo[0].a4pp==0) {
+					if(equipo[0].ataques[0].pp==0&&equipo[0].ataques[1].pp==0&&equipo[0].ataques[2].pp==0&&equipo[0].ataques[3].pp==0) {
 						enemigo.hp = enemigo.hp - ((equipo[0].atk+equipo[0].satk)/(2));
 						if(enemigo.hp<=0) {
-							estado=2; //mostrar vida
+							personaje.estado=2; //mostrar vida
 						}
 						equipo[0].hp = equipo[0].hp - ((equipo[0].atk+equipo[0].satk)/(2));
 						if(equipo[0].hp<=0) {
-							equipo[0].hp=0;
+							equipo[0].debilitado();
 							numpoke--;
 							if(numpoke>0) {
 								
@@ -1146,18 +952,18 @@ static Scanner sc = new Scanner(System.in);
 								}
 								t.dibuixa(lvls);
 								
-								estado=4; // equipo
+								personaje.estado=4; // equipo
 							}else {
-								estado=2;//mostrar vida
+								personaje.estado=2;//mostrar vida
 							}
 						}
 					}else {
 						//caso que queden pps en algun ataque
-						estado=5; // ataques
+						personaje.estado=5; // ataques
 					}
 				} else { ///entrar al menu de la bolsa
 					if(poshudi==1&&poshudj==0) {
-						estado=10; // bolsa
+						personaje.estado=10; // bolsa
 					} else { // intentar huir
 						if(poshudi==1&&poshudj==1) {
 							int huir = (int) (Math.random()*3);
@@ -1171,11 +977,13 @@ static Scanner sc = new Scanner(System.in);
 								t.dibuixa(lvls);
 								
 								combates=false;
-								estado=0; //mundo
+								personaje.estado=0; //mundo
 							} else {
-								dañoapoke(enemigo);
+								
+								equipo[0].turnocombate(enemigo, new Ataques());
+								personaje.estado = 2;
 								if(equipo[0].hp<=0) {
-									equipo[0].hp=0;
+									equipo[0].debilitado();
 									numpoke--;
 									if(numpoke>0) {
 										
@@ -1186,9 +994,9 @@ static Scanner sc = new Scanner(System.in);
 										}
 										t.overdibuixa(lvls);
 										
-										estado=4; // equipo
+										personaje.estado=4; // equipo
 									}else {
-										estado=2; // mostrar vida
+										personaje.estado=2; // mostrar vida
 									}
 								}
 							}
@@ -1203,7 +1011,7 @@ static Scanner sc = new Scanner(System.in);
 								}
 								t.overdibuixa(lvls);
 								
-								estado=4;// equipo
+								personaje.estado=4;// equipo
 							}
 						}
 					}
@@ -1268,35 +1076,27 @@ static Scanner sc = new Scanner(System.in);
 				x1=0; y1=0;
 				x2=1; y2=0;
 				x3=2; y3=0;
-				ataque = equipo[0].a1name;
-				type = equipo[0].a1type;
-				pps = equipo[0].a1pp;
 				break;
 			case 1:
 				x1=0; y1=1;
 				x2=1; y2=1;
 				x3=2; y3=1;
-				ataque = equipo[0].a2name;
-				type = equipo[0].a2type;
-				pps = equipo[0].a2pp;
 				break;
 			case 2:
 				x1=3; y1=0;
 				x2=4; y2=0;
 				x3=5; y3=0;
-				ataque = equipo[0].a3name;
-				type = equipo[0].a3type;
-				pps = equipo[0].a3pp;
 				break;
 			case 3:
 				x1=3; y1=1;
 				x2=4; y2=1;
 				x3=5; y3=1;
-				ataque = equipo[0].a4name;
-				type = equipo[0].a4type;
-				pps = equipo[0].a4pp;
 				break;
 			}
+			
+			ataque = equipo[0].ataques[i].name;
+			type = equipo[0].ataques[i].type;
+			pps = equipo[0].ataques[i].pp;
 			
 			switch(ataque) {
 			case "Placaje":
@@ -1425,45 +1225,45 @@ static Scanner sc = new Scanner(System.in);
 			break;
 		case 'c': case 'C':
 			
-			if(posluchari==0&&poslucharj==0&&equipo[0].a1pp>0) {
+			if(posluchari==0&&poslucharj==0&&equipo[0].ataques[0].pp>0) {
+				ataqueescojido=0;
+				equipo[0].ataques[0].pp--;
+				matriuover[0][0] = 28;
+				matriuover[0][1] = 28;
+				matriuover[1][0] = 28;
+				matriuover[1][1] = 28;
+				t2.overdibuixa(matriuover);
+				personaje.estado=6;
+			}
+			if(posluchari==0&&poslucharj==1&&equipo[0].ataques[1].pp>0) {
 				ataqueescojido=1;
-				equipo[0].a1pp--;
+				equipo[0].ataques[1].pp--;
 				matriuover[0][0] = 28;
 				matriuover[0][1] = 28;
 				matriuover[1][0] = 28;
 				matriuover[1][1] = 28;
 				t2.overdibuixa(matriuover);
-				estado=6;
+				personaje.estado=6;
 			}
-			if(posluchari==0&&poslucharj==1&&equipo[0].a2pp>0) {
+			if(posluchari==3&&poslucharj==0&&equipo[0].ataques[2].pp>0) {
 				ataqueescojido=2;
-				equipo[0].a2pp--;
+				equipo[0].ataques[2].pp--;
 				matriuover[0][0] = 28;
 				matriuover[0][1] = 28;
 				matriuover[1][0] = 28;
 				matriuover[1][1] = 28;
 				t2.overdibuixa(matriuover);
-				estado=6;
+				personaje.estado=6;
 			}
-			if(posluchari==3&&poslucharj==0&&equipo[0].a3pp>0) {
+			if(posluchari==3&&poslucharj==1&&equipo[0].ataques[2].pp>0) {
 				ataqueescojido=3;
-				equipo[0].a3pp--;
+				equipo[0].ataques[2].pp--;
 				matriuover[0][0] = 28;
 				matriuover[0][1] = 28;
 				matriuover[1][0] = 28;
 				matriuover[1][1] = 28;
 				t2.overdibuixa(matriuover);
-				estado=6;
-			}
-			if(posluchari==3&&poslucharj==1&&equipo[0].a4pp>0) {
-				ataqueescojido=4;
-				equipo[0].a4pp--;
-				matriuover[0][0] = 28;
-				matriuover[0][1] = 28;
-				matriuover[1][0] = 28;
-				matriuover[1][1] = 28;
-				t2.overdibuixa(matriuover);
-				estado=6;
+				personaje.estado=6;
 			}
 			break;
 		case 'e': case 'E':
@@ -1473,7 +1273,7 @@ static Scanner sc = new Scanner(System.in);
 			matriuover[1][0] = 28;
 			matriuover[1][1] = 28;
 			t2.overdibuixa(matriuover);
-			estado=1; //combate
+			personaje.estado=1; //combate
 			break;
 		}
 		
@@ -1482,345 +1282,29 @@ static Scanner sc = new Scanner(System.in);
 	private static Pokemon daño(Pokemon enemigo, int prioridad) {
 		// orden de ataque en funcion de la prioridad (funcion verrapidez)
 		
-		switch(prioridad) {
-		case 1:
-			vidamaxsalvaje=((enemigo.hp*100)/enemigo.maxhp);
-			dañoasalvaje(enemigo);
-			vidasalvaje=((enemigo.hp*100)/enemigo.maxhp);
-			if(vidasalvaje<0) {
-				vidasalvaje=0;
-			}
-			if(enemigo.hp<=0) {
-				combates=false;
-				estado=2;//mostrar como baja la vida
-			}else {
-				vidamaxpoke=((equipo[0].hp*100)/equipo[0].maxhp);
-				dañoapoke(enemigo);
-				vidapoke=((equipo[0].hp*100)/equipo[0].maxhp);
-				if(vidapoke<0) {
-					vidapoke=0;
-				}
-				if(equipo[0].hp<=0) {
-					equipo[0].hp=0;
-					numpoke--;
-					if(numpoke>0) {
-						estado=4;//equipo
-					}else {
-						combates=false;
-						estado=2;//mostrar como baja la vida
-					}
-					
-				}
-			}
-			
-			break;
-		case 2:
-			vidamaxpoke=((equipo[0].hp*100)/equipo[0].maxhp);
-			dañoapoke(enemigo);
-			vidapoke=((equipo[0].hp*100)/equipo[0].maxhp);
-			if(vidapoke<0) {
-				vidapoke=0;
-			}
-			if(equipo[0].hp<=0) {
-				equipo[0].hp=0;
-				numpoke--;
-				if(numpoke>0) {
-					estado=4;//equipo
-				}else {
-					
-					estado=2;//mostrar como baja la vida
-				}
-			}else {
-				vidamaxsalvaje=((enemigo.hp*100)/enemigo.maxhp);
-				dañoasalvaje(enemigo);
-				vidasalvaje=((enemigo.hp*100)/enemigo.maxhp);
-				if(vidasalvaje<0) {
-					vidasalvaje=0;
-				}
-				if(enemigo.hp<=0&&estado!=2) {
-					combates=false;
-					estado=2;//mostrar como baja la vida
-				}
-			}
-			break;
-		}
-		
-		if(enemigo.hp>0) {
-			estado=2;//mostrar como baja la vida
-		}
-		return enemigo;
-	}
-	
-	private static void dañoapoke(Pokemon enemigo) {
-		// daño que recibe tu pokemon
-		
-		String anameescojido="";
-		String atypeescojido="";
-		int apwrescojido=0;
-		int amaxppescojido=0;
-		int appescojido=0;
-		int aaccescojido=0;
-		int actyescojido=0;
-		double daño=0;
-		double stab=0;
-		
-		int ataqueescojidosalvaje = (int) (Math.random()*4);
-		
-		// random dle ataque dle salvaje
-		while((ataqueescojidosalvaje==0&&(enemigo.a1name==" "||enemigo.a1name==""))||(ataqueescojidosalvaje==1&&(enemigo.a2name==" "||enemigo.a2name==""))||(ataqueescojidosalvaje==2&&(enemigo.a3name==" "||enemigo.a3name==""))||(ataqueescojidosalvaje==3&&(enemigo.a4name==" "||enemigo.a4name==""))){
-			ataqueescojidosalvaje = (int) (Math.random()*4);
-		}
-		
-			switch(ataqueescojidosalvaje) {
-			case 0:
-				anameescojido=enemigo.a1name;
-				atypeescojido=enemigo.a1type;
-				apwrescojido=enemigo.a1pwr;
-				appescojido=enemigo.a1pp;
-				amaxppescojido=enemigo.a1maxpp;
-				aaccescojido=enemigo.a1acc;
-				actyescojido=enemigo.a1cty;
-				break;
-			case 1:
-				anameescojido=enemigo.a2name;
-				atypeescojido=enemigo.a2type;
-				apwrescojido=enemigo.a2pwr;
-				appescojido=enemigo.a2pp;
-				amaxppescojido=enemigo.a2maxpp;
-				aaccescojido=enemigo.a2acc;
-				actyescojido=enemigo.a2cty;
-				break;
-			case 2:
-				anameescojido=enemigo.a3name;
-				atypeescojido=enemigo.a3type;
-				apwrescojido=enemigo.a3pwr;
-				appescojido=enemigo.a3pp;
-				amaxppescojido=enemigo.a3maxpp;
-				aaccescojido=enemigo.a3acc;
-				actyescojido=enemigo.a3cty;
-				break;
-			case 3:
-				anameescojido=enemigo.a4name;
-				atypeescojido=enemigo.a4type;
-				apwrescojido=enemigo.a4pwr;
-				appescojido=enemigo.a4pp;
-				amaxppescojido=enemigo.a4maxpp;
-				aaccescojido=enemigo.a4acc;
-				actyescojido=enemigo.a4cty;
-				break;
-			}
-			
-			// calculo daño
-			if(atypeescojido==enemigo.type1||atypeescojido==enemigo.type2) {
-				stab = 1.5;
-			}
-			
-			int ruta = 2;
-			double debilidad = tabladetipos(enemigo, ruta, atypeescojido);
-			
-			daño = debilidad + stab;
-			int dañorealizado=0;
-			
-			if(actyescojido==0) {
-				dañorealizado= (int) ((enemigo.atk-equipo[0].def)*daño);
-			}else {
-				if(actyescojido==1) {
-					dañorealizado= (int) ((enemigo.satk-equipo[0].sdef)*daño);
-				}
-			}
-			
-			if(dañorealizado<=0) {
-				dañorealizado=(int) (1*daño);
-			}
-				
-				equipo[0].hp = (int) (equipo[0].hp - dañorealizado);
-				
-	
-	}
 
-	private static Pokemon dañoasalvaje(Pokemon enemigo) {
-		// lo mismo que en la funion de dañoapoke pero al reves
+		vidamaxpoke=((equipo[0].hp*100)/equipo[0].maxhp);
+		vidamaxsalvaje=((enemigo.hp*100)/enemigo.maxhp);
 		
-		String anameescojido="";
-		String atypeescojidosalvaje="";
-		int apwrescojido=0;
-		int amaxppescojido=0;
-		int appescojido=0;
-		int aaccescojido=0;
-		int actyescojido=0;
-		double daño=0;
-		double stab=0;
+		equipo[0].turnocombate(enemigo, equipo[0].ataques[ataqueescojido]);
 		
-		switch(ataqueescojido) {
-		case 1:
-			anameescojido=equipo[0].a1name;
-			atypeescojidosalvaje=equipo[0].a1type;
-			apwrescojido=equipo[0].a1pwr;
-			amaxppescojido=equipo[0].a1maxpp;
-			appescojido=equipo[0].a1pp;
-			aaccescojido=equipo[0].a1acc;
-			actyescojido=equipo[0].a1cty;
-			break;
-		case 2:
-			anameescojido=equipo[0].a2name;
-			atypeescojidosalvaje=equipo[0].a2type;
-			apwrescojido=equipo[0].a2pwr;
-			amaxppescojido=equipo[0].a2maxpp;
-			appescojido=equipo[0].a2pp;
-			aaccescojido=equipo[0].a2acc;
-			actyescojido=equipo[0].a2cty;
-			break;
-		case 3:
-			anameescojido=equipo[0].a3name;
-			atypeescojidosalvaje=equipo[0].a3type;
-			apwrescojido=equipo[0].a3pwr;
-			amaxppescojido=equipo[0].a3maxpp;
-			appescojido=equipo[0].a3pp;
-			aaccescojido=equipo[0].a3acc;
-			actyescojido=equipo[0].a3cty;
-			break;
-		case 4:
-			anameescojido=equipo[0].a4name;
-			atypeescojidosalvaje=equipo[0].a4type;
-			apwrescojido=equipo[0].a4pwr;
-			amaxppescojido=equipo[0].a4maxpp;
-			appescojido=equipo[0].a4pp;
-			aaccescojido=equipo[0].a4acc;
-			actyescojido=equipo[0].a4cty;
-			break;
+		personaje.estado=2; // mostrar vida
+		if(enemigo.hp<=0) {
+			enemigo.debilitado();
 		}
-		
-		if(equipo[0].type1==atypeescojidosalvaje||equipo[0].type2==atypeescojidosalvaje) {
-			stab = 1.5;
-		}
-		
-		int ruta=1;
-		double debilidad = tabladetipos(enemigo, ruta, atypeescojidosalvaje);
-		
-		daño = debilidad + stab;
-		int dañorealizado=0;
-		if(actyescojido==0) {
-			dañorealizado= (int) ((equipo[0].atk-enemigo.def)*daño);
-		}else {
-			if(actyescojido==1) {
-				dañorealizado= (int) ((equipo[0].satk-enemigo.sdef)*daño);
+		if(equipo[0].hp<=0) {
+			equipo[0].debilitado();
+			numpoke--;
+			if(numpoke>0) {
+				personaje.estado=4; // equipo	
 			}
 		}
 		
-		if(dañorealizado<=0) {
-			dañorealizado=(int) (1*daño);
-		}
-			
-			enemigo.hp = (int) (enemigo.hp - dañorealizado);
-			
+		vidapoke=((equipo[0].hp*100)/equipo[0].maxhp);
+		vidasalvaje=((enemigo.hp*100)/enemigo.maxhp);
+		
 		
 		return enemigo;
-
-	}
-
-	private static double tabladetipos(Pokemon enemigo, int ruta, String atypeescojido) {
-		// tabla de tipos para ver debilidades
-		
-		String typeataqueatacante="";
-		String type1defensor="";
-		String type2defensor="";
-		double debilidad=1;
-		int x=0;
-		int y=0;
-		int y2=0;
-		
-		switch(ruta) {
-		case 1:///para mirar la tabla en contra de el enemigo
-			typeataqueatacante=atypeescojido;
-			type1defensor=enemigo.type1;
-			type2defensor=enemigo.type2;
-			break;
-		case 2:///para mirar la tabla en contra de tu pokemon
-			typeataqueatacante=atypeescojido;
-			type1defensor=equipo[0].type1;
-			type2defensor=equipo[0].type2;
-			break;
-		}
-		
-		Tablatipos tipo = new Tablatipos();
-		
-		switch(typeataqueatacante) {
-		case "Acero": x = 0; break;
-		case "Agua": x = 1; break;
-		case "Bicho": x = 2; break;
-		case "Dragón": x = 3; break;
-		case "Eléctrico": x = 4; break;
-		case "Fantasma": x = 5; break;
-		case "Fuego": x = 6; break;
-		case "Hada": x = 7; break;
-		case "Hielo": x = 8; break;
-		case "Lucha": x = 9; break;
-		case "Normal": x = 10; break;
-		case "Planta": x = 11; break;
-		case "Psíquico": x = 12; break;
-		case "Roca": x = 13; break;
-		case "Siniestro": x = 14; break;
-		case "Tierra": x = 15; break;
-		case "Veneno": x = 16; break;
-		case "Volador": x = 17; break;
-		}
-		
-		switch(type1defensor) {
-		case "Acero": y = 0; break;
-		case "Agua": y = 1; break;
-		case "Bicho": y = 2; break;
-		case "Dragón": y = 3; break;
-		case "Eléctrico": y = 4; break;
-		case "Fantasma": y = 5; break;
-		case "Fuego": y = 6; break;
-		case "Hada": y = 7; break;
-		case "Hielo": y = 8; break;
-		case "Lucha": y = 9; break;
-		case "Normal": y = 10; break;
-		case "Planta": y = 11; break;
-		case "Psíquico": y = 12; break;
-		case "Roca": y = 13; break;
-		case "Siniestro": y = 14; break;
-		case "Tierra": y = 15; break;
-		case "Veneno": y = 16; break;
-		case "Volador": y = 17; break;
-		}
-		
-		switch(type2defensor) {
-		case "Acero": y2 = 0; break;
-		case "Agua": y2 = 1; break;
-		case "Bicho": y2 = 2; break;
-		case "Dragón": y2 = 3; break;
-		case "Eléctrico": y2 = 4; break;
-		case "Fantasma": y2 = 5; break;
-		case "Fuego": y2 = 6; break;
-		case "Hada": y2 = 7; break;
-		case "Hielo": y2 = 8; break;
-		case "Lucha": y2 = 9; break;
-		case "Normal": y2 = 10; break;
-		case "Planta": y2 = 11; break;
-		case "Psíquico": y2 = 12; break;
-		case "Roca": y2 = 13; break;
-		case "Siniestro": y2 = 14; break;
-		case "Tierra": y2 = 15; break;
-		case "Veneno": y2 = 16; break;
-		case "Volador": y2 = 17; break;
-		}
-		
-		//si el salvaje tiene u  tipo o dos
-		for(int i=0; i<2; i++) {
-			if(i==0) {
-				debilidad = tipo.tabla[x][y];
-			}else {
-				if(i==1) {
-					if((enemigo.type2!=""||enemigo.type2!=" ")) {
-						debilidad = debilidad * tipo.tabla[x][y2];
-					}
-				}
-			}
-		}
-		
-		return debilidad;
 	}
 	
 	private static void bolsa(Pokemon enemigo) {
@@ -1921,31 +1405,35 @@ static Scanner sc = new Scanner(System.in);
 				/// en el dos cambia al estado 11, donde esta la funcion de captura
 				if(accionbolsa==2) {
 					contadorcaptura=0;
-					estado=11;
+					personaje.estado=11;
 				}else {
 					if(accionbolsa==1) {
 						if(numpociones>0) {
-							equipo[0].hp = equipo[0].hp + 20;
+							
+							equipo[0].curar(200);
 							numpociones--;
-							dañoapoke(enemigo);
+							
+							//combate en el que solo ataca el rival al pasarle como ataque el numero 0
+							equipo[0].turnocombate(enemigo, new Ataques());
+							
 							if(equipo[0].hp<=0) {
 								equipo[0].hp=0;
 								numpoke--;
 								if(numpoke>0) {
-									estado=4;
+									personaje.estado=4;
 									//equipo();
 								}else {
-									estado=2;//mostrar como baja la vida
+									personaje.estado=2;//mostrar como baja la vida
 								}
 							}
 						}
-						estado=1;
+						personaje.estado=1;
 					}
 				}
 				break;
 			case 'e': case 'E':
 				//para salir del menu de la bolsa al menu de combate
-				estado=1;
+				personaje.estado=1;
 				break;
 			}
 		
@@ -1971,17 +1459,20 @@ static Scanner sc = new Scanner(System.in);
 				contadorcaptura++;
 				combate2[0][2]=141;
 			}else {
-				dañoapoke(enemigo);
+
+				//combate en el que solo ataca el rival al pasarle como ataque el numero 0
+				equipo[0].turnocombate(enemigo, new Ataques());
+				
 				if(equipo[0].hp<=0) {
 					equipo[0].hp=0;
 					numpoke--;
 					if(numpoke>0) {
-						estado=4; // equipo
+						personaje.estado=4; // equipo
 					}else {
-						estado=2;
+						personaje.estado=2;
 					}
 				}else {
-					estado=1;
+					personaje.estado=1;
 				}
 			}
 			break;
@@ -1996,17 +1487,20 @@ static Scanner sc = new Scanner(System.in);
 				contadorcaptura++;
 				combate2[0][2]=142;
 			}else {
-				dañoapoke(enemigo);
+
+				//combate en el que solo ataca el rival al pasarle como ataque el numero 0
+				equipo[0].turnocombate(enemigo, new Ataques());
+				
 				if(equipo[0].hp<=0) {
-					equipo[0].hp=0;
+					equipo[0].debilitado();
 					numpoke--;
 					if(numpoke>0) {
-						estado=4; // equipo
+						personaje.estado=4; // equipo
 					}else {
-						estado=2;
+						personaje.estado=2;
 					}
 				}else {
-					estado=1;
+					personaje.estado=1;
 				}
 			}
 			break;
@@ -2018,17 +1512,20 @@ static Scanner sc = new Scanner(System.in);
 				contadorcaptura++;
 				combate2[0][2]=143;
 			}else {
-				dañoapoke(enemigo);
+
+				//combate en el que solo ataca el rival al pasarle como ataque el numero 0
+				equipo[0].turnocombate(enemigo, new Ataques());
+				
 				if(equipo[0].hp<=0) {
-					equipo[0].hp=0;
+					equipo[0].debilitado();
 					numpoke--;
 					if(numpoke>0) {
-						estado=4; // equipo
+						personaje.estado=4; // equipo
 					}else {
-						estado=2;
+						personaje.estado=2;
 					}
 				}else {
-					estado=1;
+					personaje.estado=1;
 				}
 			}
 			
@@ -2042,57 +1539,11 @@ static Scanner sc = new Scanner(System.in);
 		}
 		
 		if(contadorcaptura==7) {
-			for(int i=0; i<500; i++) {
-				if(pc[i].nivel==0&&contador==0) {
-					contador++;
-					pc[i].nombre = enemigo.nombre;
-					pc[i].nivel = enemigo.nivel;
-					pc[i].type1 = enemigo.type1;
-					pc[i].type2 = enemigo.type2;
-					pc[i].npokedex = enemigo.npokedex;
-					pc[i].hp = enemigo.hp;
-					pc[i].maxhp = enemigo.maxhp;
-					pc[i].exp = enemigo.exp;
-					pc[i].totexp = enemigo.totexp;
-					pc[i].atk = enemigo.atk;
-					pc[i].satk = enemigo.satk;
-					pc[i].def = enemigo.def;
-					pc[i].sdef = enemigo.sdef;
-					pc[i].spd = enemigo.spd;
-					pc[i].a1name = enemigo.a1name;
-					pc[i].a2name = enemigo.a2name;
-					pc[i].a3name = enemigo.a3name;
-					pc[i].a4name = enemigo.a4name;
-					pc[i].a1type = enemigo.a1type;
-					pc[i].a2type = enemigo.a2type;
-					pc[i].a3type = enemigo.a3type;
-					pc[i].a4type = enemigo.a4type;
-					pc[i].a1pwr = enemigo.a1pwr;
-					pc[i].a2pwr = enemigo.a2pwr;
-					pc[i].a3pwr = enemigo.a3pwr;
-					pc[i].a4pwr = enemigo.a4pwr;
-					pc[i].a1acc = enemigo.a1acc;
-					pc[i].a2acc = enemigo.a2acc;
-					pc[i].a3acc = enemigo.a3acc;
-					pc[i].a4acc = enemigo.a4acc;
-					pc[i].a1cty = enemigo.a1cty;
-					pc[i].a2cty = enemigo.a2cty;
-					pc[i].a3cty = enemigo.a3cty;
-					pc[i].a4cty = enemigo.a4cty;
-					pc[i].a1pp = enemigo.a1pp;
-					pc[i].a2pp = enemigo.a2pp;
-					pc[i].a3pp = enemigo.a3pp;
-					pc[i].a4pp = enemigo.a4pp;
-					pc[i].a1maxpp = enemigo.a1maxpp;
-					pc[i].a2maxpp = enemigo.a2maxpp;
-					pc[i].a3maxpp = enemigo.a3maxpp;
-					pc[i].a4maxpp = enemigo.a4maxpp;
-					t2.setImgbackground("background.jpg");
-					combates=false;
-					boolean derrota = false;
-					fincombate(derrota, enemigo);
-				}
-			}
+			pcpokemon.guardar(pcpokemon, enemigo);
+			t2.setImgbackground("background.jpg");
+			combates=false;
+			boolean derrota = false;
+			fincombate(derrota, enemigo);
 		}
 		
 		String combate2v="";
@@ -2177,13 +1628,16 @@ static Scanner sc = new Scanner(System.in);
 				}
 				
 				int porcentaje = 0;
-				if(equipo[i].npokedex>=0) {
+				if(equipo[i].npokedex>=0&&equipo[0].maxhp>0) {
 						if (equipo[i].hp>0) {
 							porcentaje = (equipo[i].hp * 100);
 							porcentaje = porcentaje / equipo[i].maxhp;
 						}else {
 							porcentaje=0;
 						}
+					menuequipo[x2][y2]=fotoshp[porcentaje];
+				}else if(equipo[i].maxhp<=0) {
+					porcentaje=0;
 					menuequipo[x2][y2]=fotoshp[porcentaje];
 				}
 			}
@@ -2348,53 +1802,11 @@ static Scanner sc = new Scanner(System.in);
 				contador=0;
 				//for para guardar pokemon en el pc si accedes al pc
 				if(guardar&&equipo[0].nivel>0&&equipo[1].nivel>0) {
-					for(int i=0; i<500; i++) {
-						if(pc[i].nivel==0&contador==0) {
-							int aux1 = equipo[posicion].npokedex; equipo[posicion].npokedex = pc[i].npokedex; pc[i].npokedex = aux1;
-							String aux2 = equipo[posicion].nombre; equipo[posicion].nombre = pc[i].nombre; pc[i].nombre = aux2;
-							int aux3 = equipo[posicion].nivel; equipo[posicion].nivel = pc[i].nivel; pc[i].nivel = aux3;
-							String aux4 = equipo[posicion].type1; equipo[posicion].type1 = pc[i].type1; pc[i].type1 = aux4;
-							String aux5 = equipo[posicion].type2; equipo[posicion].type2 = pc[i].type2; pc[i].type2 = aux5;
-							int aux6 = equipo[posicion].hp; equipo[posicion].hp = pc[i].hp; pc[i].hp = aux6;
-							int aux7 = equipo[posicion].maxhp; equipo[posicion].maxhp = pc[i].maxhp; pc[i].maxhp = aux7;
-							int aux8 = equipo[posicion].exp; equipo[posicion].exp = pc[i].exp; pc[i].exp = aux8;
-							int aux9 = equipo[posicion].totexp; equipo[posicion].totexp = pc[i].totexp; pc[i].totexp = aux9;
-							int aux10 = equipo[posicion].atk; equipo[posicion].atk = pc[i].atk; pc[i].atk = aux10;
-							int aux11 = equipo[posicion].satk; equipo[posicion].satk = pc[i].satk; pc[i].satk = aux11;
-							int aux12 = equipo[posicion].def; equipo[posicion].def = pc[i].def; pc[i].def = aux12;
-							int aux13 = equipo[posicion].sdef; equipo[posicion].sdef = pc[i].sdef; pc[i].sdef = aux13;
-							int aux14 = equipo[posicion].spd; equipo[posicion].spd = pc[i].spd; pc[i].spd = aux14;
-							String aux15 = equipo[posicion].a1name; equipo[posicion].a1name = pc[i].a1name; pc[i].a1name = aux15;
-							String aux16 = equipo[posicion].a2name; equipo[posicion].a2name = pc[i].a2name; pc[i].a2name = aux16;
-							String aux17 = equipo[posicion].a3name; equipo[posicion].a3name = pc[i].a3name; pc[i].a3name = aux17;
-							String aux18 = equipo[posicion].a4name; equipo[posicion].a4name = pc[i].a4name; pc[i].a4name = aux18;
-							String aux19 = equipo[posicion].a1type; equipo[posicion].a1type = pc[i].a1type; pc[i].a1type = aux19;
-							String aux20 = equipo[posicion].a2type; equipo[posicion].a2type = pc[i].a2type; pc[i].a2type = aux20;
-							String aux21 = equipo[posicion].a3type; equipo[posicion].a3type = pc[i].a3type; pc[i].a3type = aux21;
-							String aux22 = equipo[posicion].a4type; equipo[posicion].a4type = pc[i].a4type; pc[i].a4type = aux22;
-							int aux23 = equipo[posicion].a1pwr; equipo[posicion].a1pwr = pc[i].a1pwr; pc[i].a1pwr = aux23;
-							int aux24 = equipo[posicion].a2pwr; equipo[posicion].a2pwr = pc[i].a2pwr; pc[i].a2pwr = aux24;
-							int aux25 = equipo[posicion].a3pwr; equipo[posicion].a3pwr = pc[i].a3pwr; pc[i].a3pwr = aux25;
-							int aux26 = equipo[posicion].a4pwr; equipo[posicion].a4pwr = pc[i].a4pwr; pc[i].a4pwr = aux26;
-							int aux27 = equipo[posicion].a1acc; equipo[posicion].a1acc = pc[i].a1acc; pc[i].a1acc = aux27;
-							int aux28 = equipo[posicion].a2acc; equipo[posicion].a2acc = pc[i].a2acc; pc[i].a2acc = aux28;
-							int aux29 = equipo[posicion].a3acc; equipo[posicion].a3acc = pc[i].a3acc; pc[i].a3acc = aux29;
-							int aux30 = equipo[posicion].a4acc; equipo[posicion].a4acc = pc[i].a4acc; pc[i].a4acc = aux30;
-							int aux31 = equipo[posicion].a1pp; equipo[posicion].a1pp = pc[i].a1pp; pc[i].a1pp = aux31;
-							int aux32 = equipo[posicion].a2pp; equipo[posicion].a2pp = pc[i].a2pp; pc[i].a2pp = aux32;
-							int aux33 = equipo[posicion].a3pp; equipo[posicion].a3pp = pc[i].a3pp; pc[i].a3pp = aux33;
-							int aux34 = equipo[posicion].a4pp; equipo[posicion].a4pp = pc[i].a4pp; pc[i].a4pp = aux34;
-							int aux35 = equipo[posicion].a1maxpp; equipo[posicion].a1maxpp = pc[i].a1maxpp; pc[i].a1maxpp = aux35;
-							int aux36 = equipo[posicion].a2maxpp; equipo[posicion].a2maxpp = pc[i].a2maxpp; pc[i].a2maxpp = aux36;
-							int aux37 = equipo[posicion].a3maxpp; equipo[posicion].a3maxpp = pc[i].a3maxpp; pc[i].a3maxpp = aux37;
-							int aux38 = equipo[posicion].a4maxpp; equipo[posicion].a4maxpp = pc[i].a4maxpp; pc[i].a4maxpp = aux38;
-							int aux39 = equipo[posicion].a1cty; equipo[posicion].a1cty = pc[i].a1cty; pc[i].a1cty = aux39;
-							int aux40 = equipo[posicion].a2cty; equipo[posicion].a2cty = pc[i].a2cty; pc[i].a2cty = aux40;
-							int aux41 = equipo[posicion].a3cty; equipo[posicion].a3cty = pc[i].a3cty; pc[i].a3cty = aux41;
-							int aux42 = equipo[posicion].a4cty; equipo[posicion].a4cty = pc[i].a4cty; pc[i].a4cty = aux42;
-							contador++;
-						}
-					}
+					
+					pcpokemon.guardar(pcpokemon, equipo[posicion]);
+					contador++;		
+							
+							
 					int contadorc=0;
 					//dependiendo del pokemon que guardes en el equipo se
 					//recolocara el equipo para llenar los primeros sitios
@@ -2470,56 +1882,18 @@ static Scanner sc = new Scanner(System.in);
 							if(posicioncambio2==6) {
 								
 							}else {
-							if (equipo[posicioncambio2].nivel > 0) {
-								int auxnumpokedex = equipo[posicioncambio2].npokedex; equipo[posicioncambio2].npokedex = equipo[posicioncambio].npokedex; equipo[posicioncambio].npokedex = auxnumpokedex;
-								String auxnombre = equipo[posicioncambio2].nombre; equipo[posicioncambio2].nombre = equipo[posicioncambio].nombre; equipo[posicioncambio].nombre = auxnombre;
-								int auxnivel = equipo[posicioncambio2].nivel; equipo[posicioncambio2].nivel = equipo[posicioncambio].nivel; equipo[posicioncambio].nivel = auxnivel; String auxty1 = equipo[posicioncambio2].type1; equipo[posicioncambio2].type1 = equipo[posicioncambio].type1; equipo[posicioncambio].type1 = auxty1;
-								String auxty2 = equipo[posicioncambio2].type2; equipo[posicioncambio2].type2 = equipo[posicioncambio].type2; equipo[posicioncambio].type2 = auxty2;
-								int auxhp = equipo[posicioncambio2].hp; equipo[posicioncambio2].hp = equipo[posicioncambio].hp; equipo[posicioncambio].hp = auxhp;
-								int auxmaxhp = equipo[posicioncambio2].maxhp; equipo[posicioncambio2].maxhp = equipo[posicioncambio].maxhp; equipo[posicioncambio].maxhp = auxmaxhp;
-								int auxexp = equipo[posicioncambio2].exp; equipo[posicioncambio2].exp = equipo[posicioncambio].exp; equipo[posicioncambio].exp = auxexp;
-								int auxtotexp = equipo[posicioncambio2].totexp; equipo[posicioncambio2].totexp = equipo[posicioncambio].totexp; equipo[posicioncambio].totexp = auxtotexp;
-								int auxatk = equipo[posicioncambio2].atk; equipo[posicioncambio2].atk = equipo[posicioncambio].atk; equipo[posicioncambio].atk = auxatk;
-								int auxsatk = equipo[posicioncambio2].satk; equipo[posicioncambio2].satk = equipo[posicioncambio].satk; equipo[posicioncambio].satk = auxsatk;
-								int auxdef = equipo[posicioncambio2].def; equipo[posicioncambio2].def = equipo[posicioncambio].def; equipo[posicioncambio].def = auxdef;
-								int auxsdef = equipo[posicioncambio2].sdef; equipo[posicioncambio2].sdef = equipo[posicioncambio].sdef; equipo[posicioncambio].sdef = auxsdef;
-								int auxspd = equipo[posicioncambio2].spd; equipo[posicioncambio2].spd = equipo[posicioncambio].spd; equipo[posicioncambio].spd = auxspd;
-								String auxa1name = equipo[posicioncambio2].a1name; equipo[posicioncambio2].a1name = equipo[posicioncambio].a1name; equipo[posicioncambio].a1name = auxa1name;
-								String auxa2name = equipo[posicioncambio2].a2name; equipo[posicioncambio2].a2name = equipo[posicioncambio].a2name; equipo[posicioncambio].a2name = auxa2name;
-								String auxa3name = equipo[posicioncambio2].a3name; equipo[posicioncambio2].a3name = equipo[posicioncambio].a3name; equipo[posicioncambio].a3name = auxa3name;
-								String auxa4name = equipo[posicioncambio2].a4name; equipo[posicioncambio2].a4name = equipo[posicioncambio].a4name; equipo[posicioncambio].a4name = auxa4name;
-								String auxa1type = equipo[posicioncambio2].a1type; equipo[posicioncambio2].a1type = equipo[posicioncambio].a1type; equipo[posicioncambio].a1type = auxa1type;
-								String auxa2type = equipo[posicioncambio2].a2type; equipo[posicioncambio2].a2type = equipo[posicioncambio].a2type; equipo[posicioncambio].a2type = auxa2type;
-								String auxa3type = equipo[posicioncambio2].a3type; equipo[posicioncambio2].a3type = equipo[posicioncambio].a3type; equipo[posicioncambio].a3type = auxa3type;
-								String auxa4type = equipo[posicioncambio2].a4type; equipo[posicioncambio2].a4type = equipo[posicioncambio].a4type; equipo[posicioncambio].a4type = auxa4type;
-								int auxa1pwr = equipo[posicioncambio2].a1pwr; equipo[posicioncambio2].a1pwr = equipo[posicioncambio].a1pwr; equipo[posicioncambio].a1pwr = auxa1pwr;
-								int auxa2pwr = equipo[posicioncambio2].a2pwr; equipo[posicioncambio2].a2pwr = equipo[posicioncambio].a2pwr; equipo[posicioncambio].a2pwr = auxa2pwr;
-								int auxa3pwr = equipo[posicioncambio2].a3pwr; equipo[posicioncambio2].a3pwr = equipo[posicioncambio].a3pwr; equipo[posicioncambio].a3pwr = auxa3pwr;
-								int auxa4pwr = equipo[posicioncambio2].a4pwr; equipo[posicioncambio2].a4pwr = equipo[posicioncambio].a4pwr; equipo[posicioncambio].a4pwr = auxa4pwr;
-								int auxa1acc = equipo[posicioncambio2].a1acc; equipo[posicioncambio2].a1acc = equipo[posicioncambio].a1acc; equipo[posicioncambio].a1acc = auxa1acc;
-								int auxa2acc = equipo[posicioncambio2].a2acc; equipo[posicioncambio2].a2acc = equipo[posicioncambio].a2acc; equipo[posicioncambio].a2acc = auxa2acc;
-								int auxa3acc = equipo[posicioncambio2].a3acc; equipo[posicioncambio2].a3acc = equipo[posicioncambio].a3acc; equipo[posicioncambio].a3acc = auxa3acc;
-								int auxa4acc = equipo[posicioncambio2].a4acc; equipo[posicioncambio2].a4acc = equipo[posicioncambio].a4acc; equipo[posicioncambio].a4acc = auxa4acc;
-								int auxa1pp = equipo[posicioncambio2].a1pp; equipo[posicioncambio2].a1pp = equipo[posicioncambio].a1pp; equipo[posicioncambio].a1pp = auxa1pp;
-								int auxa2pp = equipo[posicioncambio2].a2pp; equipo[posicioncambio2].a2pp = equipo[posicioncambio].a2pp; equipo[posicioncambio].a2pp = auxa2pp;
-								int auxa3pp = equipo[posicioncambio2].a3pp; equipo[posicioncambio2].a3pp = equipo[posicioncambio].a3pp; equipo[posicioncambio].a3pp = auxa3pp;
-								int auxa4pp = equipo[posicioncambio2].a4pp; equipo[posicioncambio2].a4pp = equipo[posicioncambio].a4pp; equipo[posicioncambio].a4pp = auxa4pp;
-								int auxa1maxpp = equipo[posicioncambio2].a1maxpp; equipo[posicioncambio2].a1maxpp = equipo[posicioncambio].a1maxpp; equipo[posicioncambio].a1maxpp = auxa1maxpp;
-								int auxa2maxpp = equipo[posicioncambio2].a2maxpp; equipo[posicioncambio2].a2maxpp = equipo[posicioncambio].a2maxpp; equipo[posicioncambio].a2maxpp = auxa2maxpp;
-								int auxa3maxpp = equipo[posicioncambio2].a3maxpp; equipo[posicioncambio2].a3maxpp = equipo[posicioncambio].a3maxpp; equipo[posicioncambio].a3maxpp = auxa3maxpp;
-								int auxa4maxpp = equipo[posicioncambio2].a4maxpp; equipo[posicioncambio2].a4maxpp = equipo[posicioncambio].a4maxpp; equipo[posicioncambio].a4maxpp = auxa4maxpp;
-								int auxa1cty = equipo[posicioncambio2].a1cty; equipo[posicioncambio2].a1cty = equipo[posicioncambio].a1cty; equipo[posicioncambio].a1cty = auxa1cty;
-								int auxa2cty = equipo[posicioncambio2].a2cty; equipo[posicioncambio2].a2cty = equipo[posicioncambio].a2cty; equipo[posicioncambio].a2cty = auxa2cty;
-								int auxa3cty = equipo[posicioncambio2].a3cty; equipo[posicioncambio2].a3cty = equipo[posicioncambio].a3cty; equipo[posicioncambio].a3cty = auxa3cty;
-								int auxa4cty = equipo[posicioncambio2].a4cty; equipo[posicioncambio2].a4cty = equipo[posicioncambio].a4cty; equipo[posicioncambio].a4cty = auxa4cty;
-								posicioncambio++;
-								posicioncambio2++;
-								contadorc--;
-							} 
-						}}
+								if (equipo[posicioncambio2].nivel > 0) {
+									System.out.println(posicioncambio+" "+posicioncambio2);
+									pcpokemon.cambio(equipo[posicioncambio2], equipo[posicioncambio]);
+									posicioncambio++;
+									posicioncambio2++;
+									contadorc--;
+								}
+							}
+						}
 						//salida del menu y limpieza de la matriz overdraw
 						guardar=false;
-						estado=9;
+						personaje.estado=9;
 						int[][] matriuover2 =
 				        	{
 				            		{28,28,},
@@ -2530,7 +1904,7 @@ static Scanner sc = new Scanner(System.in);
 						
 					}else {
 						guardar=false;
-						estado=9;
+						personaje.estado=9;
 						
 						int[][] matriuover2 =
 				        	{
@@ -2545,63 +1919,38 @@ static Scanner sc = new Scanner(System.in);
 				}else {
 				///// en caso que entres al menu del equipo des de fuera dle combate y fuera del pc
 						if(equipo[posicion].nombre!=" "&&equipo[posicion].hp>0) {
-							int auxnumpokedex = equipo[0].npokedex; equipo[0].npokedex=equipo[posicion].npokedex; equipo[posicion].npokedex = auxnumpokedex;
-							String auxnombre = equipo[0].nombre; equipo[0].nombre=equipo[posicion].nombre; equipo[posicion].nombre=auxnombre;
-							int auxnivel = equipo[0].nivel; equipo[0].nivel=equipo[posicion].nivel; equipo[posicion].nivel=auxnivel;
-							String auxty1 = equipo[0].type1; equipo[0].type1=equipo[posicion].type1; equipo[posicion].type1=auxty1;
-							String auxty2 = equipo[0].type2; equipo[0].type2=equipo[posicion].type2; equipo[posicion].type2=auxty2;
-							int auxhp = equipo[0].hp; equipo[0].hp=equipo[posicion].hp; equipo[posicion].hp=auxhp;
-							int auxmaxhp = equipo[0].maxhp; equipo[0].maxhp=equipo[posicion].maxhp; equipo[posicion].maxhp=auxmaxhp;
-							int auxexp = equipo[0].exp; equipo[0].exp=equipo[posicion].exp; equipo[posicion].exp=auxexp;
-							int auxtotexp = equipo[0].totexp; equipo[0].totexp=equipo[posicion].totexp; equipo[posicion].totexp=auxtotexp;
-							int auxatk = equipo[0].atk; equipo[0].atk=equipo[posicion].atk; equipo[posicion].atk=auxatk;
-							int auxsatk = equipo[0].satk; equipo[0].satk=equipo[posicion].satk; equipo[posicion].satk=auxsatk;
-							int auxdef = equipo[0].def; equipo[0].def=equipo[posicion].def; equipo[posicion].def=auxdef;
-							int auxsdef = equipo[0].sdef; equipo[0].sdef=equipo[posicion].sdef; equipo[posicion].sdef=auxsdef;
-							int auxspd = equipo[0].spd; equipo[0].spd=equipo[posicion].spd; equipo[posicion].spd=auxspd;
-							String auxa1name = equipo[0].a1name; equipo[0].a1name=equipo[posicion].a1name; equipo[posicion].a1name=auxa1name;
-							String auxa2name = equipo[0].a2name; equipo[0].a2name=equipo[posicion].a2name; equipo[posicion].a2name=auxa2name;
-							String auxa3name = equipo[0].a3name; equipo[0].a3name=equipo[posicion].a3name; equipo[posicion].a3name=auxa3name;
-							String auxa4name = equipo[0].a4name; equipo[0].a4name=equipo[posicion].a4name; equipo[posicion].a4name=auxa4name;
-							String auxa1type = equipo[0].a1type; equipo[0].a1type=equipo[posicion].a1type; equipo[posicion].a1type=auxa1type;
-							String auxa2type = equipo[0].a2type; equipo[0].a2type=equipo[posicion].a2type; equipo[posicion].a2type=auxa2type;
-							String auxa3type = equipo[0].a3type; equipo[0].a3type=equipo[posicion].a3type; equipo[posicion].a3type=auxa3type;
-							String auxa4type = equipo[0].a4type; equipo[0].a4type=equipo[posicion].a4type; equipo[posicion].a4type=auxa4type;
-							int auxa1pwr = equipo[0].a1pwr; equipo[0].a1pwr=equipo[posicion].a1pwr; equipo[posicion].a1pwr=auxa1pwr;
-							int auxa2pwr = equipo[0].a2pwr; equipo[0].a2pwr=equipo[posicion].a2pwr; equipo[posicion].a2pwr=auxa2pwr;
-							int auxa3pwr = equipo[0].a3pwr; equipo[0].a3pwr=equipo[posicion].a3pwr; equipo[posicion].a3pwr=auxa3pwr;
-							int auxa4pwr = equipo[0].a4pwr; equipo[0].a4pwr=equipo[posicion].a4pwr; equipo[posicion].a4pwr=auxa4pwr;
-							int auxa1acc = equipo[0].a1acc; equipo[0].a1acc=equipo[posicion].a1acc; equipo[posicion].a1acc=auxa1acc;
-							int auxa2acc = equipo[0].a2acc; equipo[0].a2acc=equipo[posicion].a2acc; equipo[posicion].a2acc=auxa2acc;
-							int auxa3acc = equipo[0].a3acc; equipo[0].a3acc=equipo[posicion].a3acc; equipo[posicion].a3acc=auxa3acc;
-							int auxa4acc = equipo[0].a4acc; equipo[0].a4acc=equipo[posicion].a4acc; equipo[posicion].a4acc=auxa4acc;
-							int auxa1pp = equipo[0].a1pp; equipo[0].a1pp=equipo[posicion].a1pp; equipo[posicion].a1pp=auxa1pp;
-							int auxa2pp = equipo[0].a2pp; equipo[0].a2pp=equipo[posicion].a2pp; equipo[posicion].a2pp=auxa2pp;
-							int auxa3pp = equipo[0].a3pp; equipo[0].a3pp=equipo[posicion].a3pp; equipo[posicion].a3pp=auxa3pp;
-							int auxa4pp = equipo[0].a4pp; equipo[0].a4pp=equipo[posicion].a4pp; equipo[posicion].a4pp=auxa4pp;
-							int auxa1maxpp = equipo[0].a1maxpp; equipo[0].a1maxpp=equipo[posicion].a1maxpp; equipo[posicion].a1maxpp=auxa1maxpp;
-							int auxa2maxpp = equipo[0].a2maxpp; equipo[0].a2maxpp=equipo[posicion].a2maxpp; equipo[posicion].a2maxpp=auxa2maxpp;
-							int auxa3maxpp = equipo[0].a3maxpp; equipo[0].a3maxpp=equipo[posicion].a3maxpp; equipo[posicion].a3maxpp=auxa3maxpp;
-							int auxa4maxpp = equipo[0].a4maxpp; equipo[0].a4maxpp=equipo[posicion].a4maxpp; equipo[posicion].a4maxpp=auxa4maxpp;
-							int auxa1cty = equipo[0].a1cty; equipo[0].a1cty=equipo[posicion].a1cty; equipo[posicion].a1cty=auxa1cty;
-							int auxa2cty = equipo[0].a2cty; equipo[0].a2cty=equipo[posicion].a2cty; equipo[posicion].a2cty=auxa2cty;
-							int auxa3cty = equipo[0].a3cty; equipo[0].a3cty=equipo[posicion].a3cty; equipo[posicion].a3cty=auxa3cty;
-							int auxa4cty = equipo[0].a4cty; equipo[0].a4cty=equipo[posicion].a4cty; equipo[posicion].a4cty=auxa4cty;
-					}
+							pcpokemon.cambio(equipo[0], equipo[posicion]);
+							
+					}else {
 					//// en caso de combate se recibira daño
 						// y se comprovara el estado de derrota, etc
 					if(combates) {
-						dañoapoke(enemigo);
+						System.out.println("hola");
+						numpoke=0;
+						for(int i=0; i<6; i++) {
+							if(equipo[i].hp>0) {
+								numpoke++;
+							}
+						}
+						
+						if(numpoke==0) {
+							personaje.estado=0; // mundo
+						}
+						
+
+						//combate en el que solo ataca el rival al pasarle como ataque el numero 0
+						equipo[0].turnocombate(enemigo, new Ataques());
+						
 						if(equipo[0].hp<=0) {
-							equipo[0].hp=0;
+							equipo[0].debilitado();
 							numpoke--;
 							if(numpoke>0) {
 								equipo();
 							}else {
-								estado=2;
+								personaje.estado=2;
 							}
-						}estado=2;//combate
-						
+						}personaje.estado=2;//combate
+					}
 						int[][] matriuover2 =
 				        	{
 				            		{28,28,},
@@ -2610,14 +1959,43 @@ static Scanner sc = new Scanner(System.in);
 				        	};
 				        t2.overdibuixa(matriuover2);
 						
-					}
 					
+					}
 				}
 				break;
 			case 'e': case 'E':
 				//salir del menu del equipo
 				if(combates) {
-					estado=1;//combate
+					
+					numpoke=0;
+					for(int i=0; i<6; i++) {
+						if(equipo[i].hp>0) {
+							numpoke++;
+						}
+					}
+					
+					if(numpoke==0) {
+						combates=false;
+						personaje.estado=0; // mundo
+					}else {
+						if(equipo[posicion].hp>0) {
+
+							//combate en el que solo ataca el rival al pasarle como ataque el numero 0
+							equipo[0].turnocombate(enemigo, new Ataques());
+							
+							if(equipo[0].hp<=0) {
+								equipo[0].debilitado();
+								numpoke--;
+								if(numpoke>0) {
+									equipo();
+								}else {
+									personaje.estado=2;
+								}
+							}personaje.estado=2;//combate
+						}
+						
+						personaje.estado=2;//combate
+					}
 					int[][] matriuover2 =
 			        	{
 			            		{28,28,},
@@ -2627,7 +2005,7 @@ static Scanner sc = new Scanner(System.in);
 			        t2.overdibuixa(matriuover2);
 				}else {
 					if (guardar) {
-						estado = 9;//menu pc
+						personaje.estado = 9;//menu pc
 						int[][] matriuover2 = { 
 								{ 28, 28, }, 
 								{ 28, 28, }, 
@@ -2635,7 +2013,7 @@ static Scanner sc = new Scanner(System.in);
 						};
 						t2.overdibuixa(matriuover2);
 					}else {
-						estado=0;
+						personaje.estado=0;
 						int[][] matriuover2 = { 
 								{ 28, 28, }, 
 								{ 28, 28, }, 
@@ -2663,28 +2041,13 @@ static Scanner sc = new Scanner(System.in);
 		// victoria
 		if(derrota==false&&equipo[0].nivel<100) {
 			combates=false;
+			
 			System.out.println("exp antes "+equipo[0].exp);
 			t.setImgbackground("background.jpg");
 			t2.setImgbackground("backgroundopcion.jpg");
 			
-			int experienciabase=0;
 			
-			//experiencia ganada dependiendo del pokemon rival
-			switch(enemigo.nombre) {
-			case "Pikachu":
-				experienciabase=82;
-				break;
-			case "Pidgey":
-				experienciabase=55;
-				break;
-			case "Growlithe":
-				experienciabase=91;
-				break;
-			
-			}
-			
-			
-			equipo[0].exp = (int) (equipo[0].exp + ((enemigo.nivel*experienciabase)/(7))); 
+			equipo[0].exp = (int) (equipo[0].exp + ((enemigo.nivel*enemigo.getExpbase())/(7))); 
 			
 			if(equipo[0].exp==equipo[0].totexp) {
 				equipo[0].exp=0;
@@ -2693,15 +2056,8 @@ static Scanner sc = new Scanner(System.in);
 				for(int j=0; j<2; j++) {
 					equipo[0].totexp = equipo[0].totexp + (equipo[0].nivel*equipo[0].nivel);  
 				}
+				equipo[0].lvlup();
 				
-				equipo[0].nivel++;
-				equipo[0].maxhp = (int) (equipo[0].maxhp + (equipo[0].maxhp * 0.1));
-				equipo[0].hp = (int) (equipo[0].hp + (equipo[0].hp * 0.1));
-				equipo[0].atk = (int) (equipo[0].atk + (Math.random()*3));
-				equipo[0].satk = (int) (equipo[0].satk + (Math.random()*3));
-				equipo[0].def = (int) (equipo[0].def + (Math.random()*3));
-				equipo[0].sdef = (int) (equipo[0].sdef + (Math.random()*3));
-				equipo[0].spd = (int) (equipo[0].spd + (Math.random()*3));
 			}else {
 				//////////////////////////
 					int resto;
@@ -2718,14 +2074,8 @@ static Scanner sc = new Scanner(System.in);
 								equipo[0].totexp = equipo[0].totexp + (equipo[0].nivel*equipo[0].nivel);  
 							}
 							
-							equipo[0].nivel++;
-							equipo[0].maxhp = (int) (equipo[0].maxhp + (equipo[0].maxhp * 0.1));
-							equipo[0].hp = (int) (equipo[0].hp + (equipo[0].hp * 0.1));
-							equipo[0].atk = (int) (equipo[0].atk + (Math.random() * 3));
-							equipo[0].satk = (int) (equipo[0].satk + (Math.random() * 3));
-							equipo[0].def = (int) (equipo[0].def + (Math.random() * 3));
-							equipo[0].sdef = (int) (equipo[0].sdef + (Math.random() * 3));
-							equipo[0].spd = (int) (equipo[0].spd + (Math.random() * 3));
+							equipo[0].lvlup();
+							
 						} 
 						equipo[0].exp = equipo[0].exp + resto;
 					}else {
@@ -2743,7 +2093,7 @@ static Scanner sc = new Scanner(System.in);
 			equipo[0].totexp=1;
 		}
 		combates=false;
-		estado=0;//mostrar vida
+		personaje.estado=0;//mostrar vida
 	}
 	
 	private static void menupc() {
@@ -2814,19 +2164,20 @@ static Scanner sc = new Scanner(System.in);
 				
 				switch(posmenupci) {
 				case 0:
-					System.out.println("?");
 					posmenuequipoi=0;
 					posmenuequipoj=0;
 					guardar=true;
 					posicion=0;
-					estado=4;//equipo (para guardar)
+					personaje.estado=4;//equipo (para guardar)
 					bmenupc=false;
 					break;
 				case 1:
 					possacari=0;
 					possacarj=0;
-					posicionpc=0;
-					estado=8;//sacar del pc
+					pcx=0;
+					pcy=0;
+					cajapc=0;
+					personaje.estado=8;//sacar del pc
 					bmenupc=false;
 					break;
 				}
@@ -2849,7 +2200,7 @@ static Scanner sc = new Scanner(System.in);
 				System.out.println(menupcv);
 				t.setImgbackground("background.jpg");
 				
-				estado=0;
+				personaje.estado=0;
 				bmenupc=false;
 				break;
 			}
@@ -2875,13 +2226,18 @@ static Scanner sc = new Scanner(System.in);
 		
 		//h2 listas, npokedex para la foto y posicion en el pc
 		for(int i=0; i<500; i++) {
-			if(pc[i].nivel>0&&lista.size()<36) {
-				lista.add(pc[i].npokedex);
-				lista2.add(i);
-			}else {
-				lista2.add(160);
-				lista.add(160);
+			for(int j=0; j<6; j++) {
+				for(int k=0; k<6; k++) {
+					if(pcpokemon.pc[i][j][k].nivel>0&&lista.size()<360) {
+						lista.add(pcpokemon.pc[i][j][k].npokedex);
+						lista2.add(i);
+					}else {
+						lista2.add(160);
+						lista.add(160);
+					}
+				}
 			}
+			
 		}
 		
 		for(int i=0; i<6; i++) {
@@ -2921,20 +2277,52 @@ static Scanner sc = new Scanner(System.in);
 			}
 		}
 		
-		pokemonspcv="";
-		for(int i=0; i<6; i++) {
-			for(int j=0; j<6; j++) {
-	        pokemonspcv = pokemonspcv + pokemonspc[i][j];
-			}
-		}
-		
 		for(int i=0; i<6; i++) {
 			for(int j=0; j<6; j++) {
 				matriuover[i][j]=28;
 			}
 		}
 		
+		pokemonspc = pcpokemon.crearcaja(pcpokemon, cajapc);
+		pokemonspcv="";
+		pokemonspcv = pcpokemon.mostrarcaja(pokemonspc);
+		
 		matriuover[possacari][possacarj]=131;
+		
+		switch(cajapc) {
+		case 0:
+			t.setImgbackground("caja1.png");
+			break;
+		case 1:
+			t.setImgbackground("caja2.png");
+			break;
+		case 2:
+			t.setImgbackground("caja3.png");
+			break;
+		case 3:
+			t.setImgbackground("caja4.png");
+			break;
+		case 4:
+			t.setImgbackground("caja5.png");
+			break;
+		case 5:
+			t.setImgbackground("caja6.png");
+			break;
+		case 6:
+			t.setImgbackground("caja7.png");
+			break;
+		case 7:
+			t.setImgbackground("caja8.png");
+			break;
+		case 8:
+			t.setImgbackground("caja9.png");
+			break;
+		case 9:
+			t.setImgbackground("caja10.png");
+			break;
+		
+		
+		}
 		t.overdibuixa(matriuover);
 		t.dibuixa(pokemonspc);
 		System.out.println(pokemonspcv);
@@ -2947,8 +2335,7 @@ static Scanner sc = new Scanner(System.in);
 				if(possacari==0) {
 					
 				}else {
-					possacari++;
-					posicionpc = posicionpc - 6;
+					possacari--;
 				}
 				break;
 			case 's': case 'S':
@@ -2956,73 +2343,39 @@ static Scanner sc = new Scanner(System.in);
 					
 				}else {
 					possacari++;
-					posicionpc = posicionpc + 6;
 				}
 				break;
 			case 'a': case 'A':
 				if(possacarj==0) {
-					
+					cajapc--;
+					if(cajapc==-1) {
+						cajapc=9;
+					}
+					possacarj+=5;
 				}else {
 					possacarj--;
-					posicionpc--;
 				}
 				break;
 			case 'd': case 'D':
 				if(possacarj==5) {
-					
+					cajapc++;
+					if(cajapc==10) {
+						cajapc=0;
+					}
+					possacarj-=5;
 				}else {
 					possacarj++;
-					posicionpc++;
 				}
 				break;
 			case 'c': case 'C':
 				int contadorpc=0;
 				//// coje la posicion del pc de la lista respecto a la posicion de la matriz
 				// siempre que se haya seleccionado un pokemon y no un lugar en blanco
+				
 				for (int i = 0; i < 6; i++) {
-					if (lista2.get(posicionpc) != 160 && contadorpc == 0 && equipo[i].nivel==0) {
-						int aux = pc[posicionpc].npokedex; pc[posicionpc].npokedex = equipo[i].npokedex; equipo[i].npokedex = aux;
-						String aux2 = pc[posicionpc].nombre; pc[posicionpc].nombre = equipo[i].nombre; equipo[i].nombre = aux2;
-						String aux3 = pc[posicionpc].type1; pc[posicionpc].type1 = equipo[i].type1; equipo[i].type1 = aux3;
-						String aux4 = pc[posicionpc].type2; pc[posicionpc].type2 = equipo[i].type2; equipo[i].type2 = aux4;
-						int aux5 = pc[posicionpc].nivel; pc[posicionpc].nivel = equipo[i].nivel; equipo[i].nivel = aux5;
-						int aux6 = pc[posicionpc].hp; pc[posicionpc].hp = equipo[i].hp; equipo[i].hp = aux6;
-						int aux7 = pc[posicionpc].maxhp; pc[posicionpc].maxhp = equipo[i].maxhp; equipo[i].maxhp = aux7;
-						int aux8 = pc[posicionpc].exp; pc[posicionpc].exp = equipo[i].exp; equipo[i].exp = aux8;
-						int aux9 = pc[posicionpc].totexp; pc[posicionpc].totexp = equipo[i].totexp; equipo[i].totexp = aux9;
-						int aux10 = pc[posicionpc].atk; pc[posicionpc].atk = equipo[i].atk; equipo[i].atk = aux10;
-						int aux11 = pc[posicionpc].satk; pc[posicionpc].satk = equipo[i].satk; equipo[i].satk = aux11;
-						int aux12 = pc[posicionpc].def; pc[posicionpc].def = equipo[i].def; equipo[i].def = aux12;
-						int aux13 = pc[posicionpc].sdef; pc[posicionpc].sdef = equipo[i].sdef; equipo[i].sdef = aux13;
-						int aux14 = pc[posicionpc].spd; pc[posicionpc].spd = equipo[i].spd; equipo[i].spd = aux14;
-						String aux15 = pc[posicionpc].a1name; pc[posicionpc].a1name = equipo[i].a1name; equipo[i].a1name = aux15;
-						String aux16 = pc[posicionpc].a2name; pc[posicionpc].a2name = equipo[i].a2name; equipo[i].a2name = aux16;
-						String aux17 = pc[posicionpc].a3name; pc[posicionpc].a3name = equipo[i].a3name; equipo[i].a3name = aux17;
-						String aux18 = pc[posicionpc].a4name; pc[posicionpc].a4name = equipo[i].a4name; equipo[i].a4name = aux18;
-						String aux19 = pc[posicionpc].a1type; pc[posicionpc].a1type = equipo[i].a1type; equipo[i].a1type = aux19;
-						String aux20 = pc[posicionpc].a2type; pc[posicionpc].a2type = equipo[i].a2type; equipo[i].a2type = aux20;
-						String aux21 = pc[posicionpc].a3type; pc[posicionpc].a3type = equipo[i].a3type; equipo[i].a3type = aux21;
-						String aux22 = pc[posicionpc].a4type; pc[posicionpc].a4type = equipo[i].a4type; equipo[i].a4type = aux22;
-						int aux23 = pc[posicionpc].a1pwr; pc[posicionpc].a1pwr = equipo[i].a1pwr; equipo[i].a1pwr = aux23;
-						int aux24 = pc[posicionpc].a2pwr; pc[posicionpc].a2pwr = equipo[i].a2pwr; equipo[i].a2pwr = aux24;
-						int aux25 = pc[posicionpc].a3pwr; pc[posicionpc].a3pwr = equipo[i].a3pwr; equipo[i].a3pwr = aux25;
-						int aux26 = pc[posicionpc].a4pwr; pc[posicionpc].a4pwr = equipo[i].a4pwr; equipo[i].a4pwr = aux26;
-						int aux27 = pc[posicionpc].a1acc; pc[posicionpc].a1acc = equipo[i].a1acc; equipo[i].a1acc = aux27;
-						int aux28 = pc[posicionpc].a2acc; pc[posicionpc].a2acc = equipo[i].a2acc; equipo[i].a2acc = aux28;
-						int aux29 = pc[posicionpc].a3acc; pc[posicionpc].a3acc = equipo[i].a3acc; equipo[i].a3acc = aux29;
-						int aux30 = pc[posicionpc].a4acc; pc[posicionpc].a4acc = equipo[i].a4acc; equipo[i].a4acc = aux30;
-						int aux31 = pc[posicionpc].a1pp; pc[posicionpc].a1pp = equipo[i].a1pp; equipo[i].a1pp = aux31;
-						int aux32 = pc[posicionpc].a2pp; pc[posicionpc].a2pp = equipo[i].a2pp; equipo[i].a2pp = aux32;
-						int aux33 = pc[posicionpc].a3pp; pc[posicionpc].a3pp = equipo[i].a3pp; equipo[i].a3pp = aux33;
-						int aux34 = pc[posicionpc].a4pp; pc[posicionpc].a4pp = equipo[i].a4pp; equipo[i].a4pp = aux34;
-						int aux35 = pc[posicionpc].a1maxpp; pc[posicionpc].a1maxpp = equipo[i].a1maxpp; equipo[i].a1maxpp = aux35;
-						int aux36 = pc[posicionpc].a2maxpp; pc[posicionpc].a2maxpp = equipo[i].a2maxpp; equipo[i].a2maxpp = aux36;
-						int aux37 = pc[posicionpc].a3maxpp; pc[posicionpc].a3maxpp = equipo[i].a3maxpp; equipo[i].a3maxpp = aux37;
-						int aux38 = pc[posicionpc].a4maxpp; pc[posicionpc].a4maxpp = equipo[i].a4maxpp; equipo[i].a4maxpp = aux38;
-						int aux39 = pc[posicionpc].a1cty; pc[posicionpc].a1cty = equipo[i].a1cty; equipo[i].a1cty = aux39;
-						int aux40 = pc[posicionpc].a2cty; pc[posicionpc].a2cty = equipo[i].a2cty; equipo[i].a2cty = aux40;
-						int aux41 = pc[posicionpc].a3cty; pc[posicionpc].a3cty = equipo[i].a3cty; equipo[i].a3cty = aux41;
-						int aux42 = pc[posicionpc].a4cty; pc[posicionpc].a4cty = equipo[i].a4cty; equipo[i].a4cty = aux42;
+					if (pokemonspc[possacari][possacarj] != 160 && contadorpc == 0 && equipo[i].nivel==0) {
+						System.out.println("esto funciona");
+						pcpokemon.cambio(equipo[i], pcpokemon.pc[0][possacari][possacarj]);
 						contadorpc++;
 					} 
 				}
@@ -3038,7 +2391,8 @@ static Scanner sc = new Scanner(System.in);
 					lista.clear();
 					lista2.clear();
 					t.overdibuixa(matriuover2);
-					estado=9;//mundo
+					t.setImgbackground("background.jpg");
+					personaje.estado=9;//mundo
 				break;
 			case 'e': case 'E':
 				// salir del pc
@@ -3053,7 +2407,7 @@ static Scanner sc = new Scanner(System.in);
 				lista.clear();
 				lista2.clear();
 				t.overdibuixa(matriuover3);
-				estado=9;//mundo
+				personaje.estado=9;//mundo
 				break;
 			}
 		lista.clear();
@@ -3076,53 +2430,43 @@ static Scanner sc = new Scanner(System.in);
 			
 			switch(contadorh) {
 			case 0:
-				mapa[healerx][healery]=132;
+				map.mapas[nummap][healerx][healery]=132;
 				contadorh++;
 				break;
 			case 1:
-				mapa[healerx][healery]=133;
+				map.mapas[nummap][healerx][healery]=133;
 				contadorh++;
 				break;
 			case 2:
-				mapa[healerx][healery]=134;
+				map.mapas[nummap][healerx][healery]=134;
 				contadorh++;
 				break;
 			case 3:
-				mapa[healerx][healery]=135;
+				map.mapas[nummap][healerx][healery]=135;
 				contadorh++;
 				break;
 			case 4:
-				mapa[healerx][healery]=136;
+				map.mapas[nummap][healerx][healery]=136;
 				contadorh++;
 				break;
 			case 5:
-				mapa[healerx][healery]=137;
+				map.mapas[nummap][healerx][healery]=137;
 				contadorh++;
 				break;
 			}
 			
 		}else {
-			mapa[healerx][healery]=6;
-			estado=0;
+			map.mapas[nummap][healerx][healery]=6;
+			personaje.estado=0;
 			contadorh=0;
 		}
 		
-		mapamov[0][0]=mapa[posi-3][posj-3]; mapamov[0][1]=mapa[posi-3][posj-2]; mapamov[0][2]=mapa[posi-3][posj-1]; mapamov[0][3]=mapa[posi-3][posj]; mapamov[0][4]=mapa[posi-3][posj+1]; mapamov[0][5]=mapa[posi-3][posj+2]; mapamov[0][6]=mapa[posi-3][posj+3];
-		mapamov[1][0]=mapa[posi-2][posj-3]; mapamov[1][1]=mapa[posi-2][posj-2]; mapamov[1][2]=mapa[posi-2][posj-1]; mapamov[1][3]=mapa[posi-2][posj]; mapamov[1][4]=mapa[posi-2][posj+1]; mapamov[1][5]=mapa[posi-2][posj+2]; mapamov[1][6]=mapa[posi-2][posj+3]; 
-		mapamov[2][0]=mapa[posi-1][posj-3]; mapamov[2][1]=mapa[posi-1][posj-2]; mapamov[2][2]=mapa[posi-1][posj-1]; mapamov[2][3]=mapa[posi-1][posj]; mapamov[2][4]=mapa[posi-1][posj+1]; mapamov[2][5]=mapa[posi-1][posj+2]; mapamov[2][6]=mapa[posi-1][posj+3];
-		mapamov[3][0]=mapa[posi][posj-3]; mapamov[3][1]=mapa[posi][posj-2]; mapamov[3][2]=mapa[posi][posj-1]; mapamov[3][3]=mapa[posi][posj]; mapamov[3][4]=mapa[posi][posj+1]; mapamov[3][5]=mapa[posi][posj+2]; mapamov[3][6]=mapa[posi][posj+3]; 
-		mapamov[4][0]=mapa[posi+1][posj-3]; mapamov[4][1]=mapa[posi+1][posj-2]; mapamov[4][2]=mapa[posi+1][posj-1]; mapamov[4][3]=mapa[posi+1][posj]; mapamov[4][4]=mapa[posi+1][posj+1]; mapamov[4][5]=mapa[posi+1][posj+2]; mapamov[4][6]=mapa[posi+1][posj+3];
-		mapamov[5][0]=mapa[posi+2][posj-3]; mapamov[5][1]=mapa[posi+2][posj-2]; mapamov[5][2]=mapa[posi+2][posj-1]; mapamov[5][3]=mapa[posi+2][posj]; mapamov[5][4]=mapa[posi+2][posj+1]; mapamov[5][5]=mapa[posi+2][posj+2]; mapamov[5][6]=mapa[posi+2][posj+3];
-		mapamov[6][0]=mapa[posi+3][posj-3]; mapamov[6][1]=mapa[posi+3][posj-2]; mapamov[6][2]=mapa[posi+3][posj-1]; mapamov[6][3]=mapa[posi+3][posj]; mapamov[6][4]=mapa[posi+3][posj+1]; mapamov[6][5]=mapa[posi+3][posj+2]; mapamov[6][6]=mapa[posi+3][posj+3];
+		mapamov = map.craermapa(posi, posj, nummap);
 		
-		for(int i8=0; i8<7; i8++) {
-			for(int j8=0; j8<7; j8++) {
-				mapamovv = mapamovv + mapamov[i8][j8];
-			}
-		}
+		mapamovv = map.mostrarmapa(mapamov);
 		
 		t.dibuixa(mapamov);
-		
+		System.out.println(mapamovv);
 	}
 
 }

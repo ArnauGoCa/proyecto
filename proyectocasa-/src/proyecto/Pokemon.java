@@ -2,6 +2,7 @@ package proyecto;
 
 public class Pokemon {
 	
+	public int estado; //0 debilitado, 1 normal, 2 paralizado, 3 congelado, 4 envenenado, 5 confuso, 6 dormido, 7 quemado
 	public int npokedex;
 	public String nombre;
 	public String type1;
@@ -16,38 +17,30 @@ public class Pokemon {
 	public int satk;
 	public int sdef;
 	public int spd;
-	public String a1name;
-	public String a2name;
-	public String a3name;
-	public String a4name;
-	public String a1type;
-	public String a2type;
-	public String a3type;
-	public String a4type;
-	public int a1pwr;
-	public int a2pwr;
-	public int a3pwr;
-	public int a4pwr;
-	public int a1acc;
-	public int a2acc;
-	public int a3acc;
-	public int a4acc;
-	public int a1maxpp;
-	public int a2maxpp;
-	public int a3maxpp;
-	public int a4maxpp;
-	public int a1pp;
-	public int a2pp;
-	public int a3pp;
-	public int a4pp;
-	public int a1cty;
-	public int a2cty;
-	public int a3cty;
-	public int a4cty;
+	public Ataques[] ataques = new Ataques[4];
+	public int hpbase;
+	public int atkbase;
+	public int satkbase;
+	public int defbase;
+	public int sdefbase;
+	public int spdbase;
+	public int expbase;
+	public int ivhp;
+	public int ivatk;
+	public int ivsatk;
+	public int ivdef;
+	public int ivsdef;
+	public int ivspd;
+	public int naturaleza;
 	
 
+	public int getExpbase() {
+		return expbase;
+	}
+
 	public Pokemon(){
-		npokedex=0;
+		estado=0;
+		npokedex=160;//numero para saber que esta vacio
 		nombre="";
 		type1="";
 		type2="";
@@ -61,80 +54,634 @@ public class Pokemon {
 		satk=0;
 		sdef=0;
 		spd=0;
-		a1name="";
-		a2name="";
-		a3name="";
-		a4name="";
-		a1type="";
-		a2type="";
-		a3type="";
-		a4type="";
-		a1pwr=0;
-		a2pwr=0;
-		a3pwr=0;
-		a4pwr=0;
-		a1acc=0;
-		a2acc=0;
-		a3acc=0;
-		a4acc=0;
-		a1maxpp=0;
-		a2maxpp=0;
-		a3maxpp=0;
-		a4maxpp=0;
-		a1pp=0;
-		a2pp=0;
-		a3pp=0;
-		a4pp=0;
-		a1cty=0;
-		a2cty=0;
-		a3cty=0;
-		a4cty=0;
+		for(int i=0; i<4; i++) {
+			ataques[i] = new Ataques();
+		}
+		
+		hpbase=0;
+		atkbase=0;
+		satkbase=0;
+		defbase=0;
+		sdefbase=0;
+		spdbase=0;
+		
+		ivhp=0;
+		ivatk=0;
+		ivsatk=0;
+		ivdef=0;
+		ivsdef=0;
+		ivspd=0;
+		
+		naturaleza=0;
 	}
 	
-	public Pokemon(int np, String no, String ty1, String ty2, int nl, int mh, int h, int ex, int mex, int at, int sat, int de, int sde, int ve, String n1, String n2, String n3, String n4, String t1, String t2, String t3, String t4, int ac1, int ac2, int ac3, int ac4, int pw1, int pw2, int pw3, int pw4, int pp1, int pp2, int pp3, int pp4, int mpp1, int mpp2, int mpp3, int mpp4, int cty1, int cty2, int cty3, int cty4){
-		this.npokedex=np;
-		this.nombre=no;
-		this.type1=ty1;
-		this.type2=ty2;
-		this.nivel=nl;
-		this.maxhp=mh;
-		this.hp=h;
-		this.totexp=mex;
-		this.exp=ex;
-		this.atk=at;
-		this.def=de;
-		this.satk=sat;
-		this.sdef=sde;
-		this.spd=ve;
-		this.a1name=n1;
-		this.a2name=n2;
-		this.a3name=n3;
-		this.a4name=n4;
-		this.a1type=t1;
-		this.a2type=t2;
-		this.a3type=t3;
-		this.a4type=t4;
-		this.a1pwr=pw1;
-		this.a2pwr=pw2;
-		this.a3pwr=pw3;
-		this.a4pwr=pw4;
-		this.a1acc=ac1;
-		this.a2acc=ac2;
-		this.a3acc=ac3;
-		this.a4acc=ac4;
-		this.a1maxpp=mpp1;
-		this.a2maxpp=mpp2;
-		this.a3maxpp=mpp3;
-		this.a4maxpp=mpp4;
-		this.a1pp=pp1;
-		this.a2pp=pp2;
-		this.a3pp=pp3;
-		this.a4pp=pp4;
-		this.a1cty=cty1;
-		this.a2cty=cty2;
-		this.a3cty=cty3;
-		this.a4cty=cty4;
+	
+	
+	// Constructor de Pokemon segun el nombre
+	public Pokemon(String nombre) {
+		
+		int nivel=0;
+		nombre = nombre.toUpperCase();
+		
+		switch(nombre) {
+		case "PIKACHU":
+			this.nombre="Pikachu";
+			this.estado=1;
+			nivel = (int) (1 + Math.random()*5);
+			this.type1="Eléctrico";
+			this.type2=" ";
+			this.npokedex=0;
+			this.hpbase=35;
+			this.atkbase=55;
+			this.satkbase=40;
+			this.defbase=50;
+			this.sdefbase=50;
+			this.spdbase=90;
+			this.ivhp=(int) (Math.random()*31); this.hp = this.hpbase; this.maxhp = this.hp;
+			this.ivatk=(int) (Math.random()*31); this.atk = this.atkbase;
+			this.ivsatk=(int) (Math.random()*31); this.satk = this.satkbase;
+			this.ivdef=(int) (Math.random()*31); this.def = this.defbase;
+			this.ivsdef=(int) (Math.random()*31); this.sdef = this.sdefbase;
+			this.ivspd=(int) (Math.random()*31); this.spd = this.spdbase;
+			this.naturaleza= (int) (Math.random()*25);
+			this.expbase=82;
+			this.ataques[0] = new Ataques("Placaje");
+			this.ataques[1] = new Ataques("Rayo");
+			this.ataques[2] = new Ataques();
+			this.ataques[3] = new Ataques();
+			
+			for(int j=0; j<2; j++) {
+				this.totexp = this.totexp + (nivel*nivel);  
+			}
+			break;
+		case "PIDGEY":
+			this.nombre="Pidgey";
+			this.estado=1;
+			nivel = (int) (1 + Math.random()*5);
+			this.type1="Normal";
+			this.type2="Volador";
+			this.npokedex=1;
+			this.hpbase=40;
+			this.atkbase=45;
+			this.satkbase=40;
+			this.defbase=35;
+			this.sdefbase=35;
+			this.spdbase=56;
+			this.ivhp=(int) (Math.random()*31); this.hp = this.hpbase; this.maxhp = this.hp;
+			this.ivatk=(int) (Math.random()*31); this.atk = this.atkbase;
+			this.ivsatk=(int) (Math.random()*31); this.satk = this.satkbase;
+			this.ivdef=(int) (Math.random()*31); this.def = this.defbase;
+			this.ivsdef=(int) (Math.random()*31); this.sdef = this.sdefbase;
+			this.ivspd=(int) (Math.random()*31); this.spd = this.spdbase;
+			this.naturaleza= (int) (Math.random()*25);
+			this.expbase=55;
+			this.ataques[0] = new Ataques("Placaje");
+			this.ataques[1] = new Ataques("Picotazo");
+			this.ataques[2] = new Ataques();
+			this.ataques[3] = new Ataques();
+			
+			for(int j=0; j<2; j++) {
+				this.totexp = this.totexp + (nivel*nivel);  
+			}
+			break;
+		case "GROWLITHE":
+			this.nombre="Growlithe";
+			this.estado=1;
+			nivel = (int) (1 + Math.random()*5);
+			this.type1="Fuego";
+			this.type2=" ";
+			this.npokedex=2;
+			this.hpbase=55;
+			this.atkbase=70;
+			this.satkbase=45;
+			this.defbase=70;
+			this.sdefbase=50;
+			this.spdbase=60;
+			this.ivhp=(int) (Math.random()*31); this.hp = this.hpbase; this.maxhp = this.hp;
+			this.ivatk=(int) (Math.random()*31); this.atk = this.atkbase;
+			this.ivsatk=(int) (Math.random()*31); this.satk = this.satkbase;
+			this.ivdef=(int) (Math.random()*31); this.def = this.defbase;
+			this.ivsdef=(int) (Math.random()*31); this.sdef = this.sdefbase;
+			this.ivspd=(int) (Math.random()*31); this.spd = this.spdbase;
+			this.naturaleza= (int) (Math.random()*25);
+			this.expbase=91;
+			this.ataques[0] = new Ataques("Placaje");
+			this.ataques[1] = new Ataques("Ascuas");
+			this.ataques[2] = new Ataques();
+			this.ataques[3] = new Ataques();
+			
+			for(int j=0; j<2; j++) {
+				this.totexp = this.totexp + (nivel*nivel);  
+			}
+			break;
+		default:
+			this.estado=0;
+			this.npokedex=160;
+			this.nivel=0;
+			this.hpbase=0;
+			this.atkbase=0;
+			this.satkbase=0;
+			this.defbase=0;
+			this.sdefbase=0;
+			this.spdbase=0;
+			this.ivhp=0; this.hp = this.hpbase; this.maxhp = this.hp;
+			this.ivatk=0; this.atk = this.atkbase;
+			this.ivsatk=0; this.satk = this.satkbase;
+			this.ivdef=0; this.def = this.defbase;
+			this.ivsdef=0; this.sdef = this.sdefbase;
+			this.ivspd=0; this.spd = this.spdbase;
+			this.naturaleza=160;
+			this.expbase=0; this.exp=0; this.totexp=0;
+			
+			for(int i=0; i<4; i++) {
+				this.ataques[i] = new Ataques();
+			}
+			
+			break;
+		}
+		
+		for(int i=0; i<nivel; i++) {
+			lvlup();
+		}
+		
 	}
+	
+	public void curar(int cura) {
+		//curacion con un objeto que cura el numero de ps indicado por la variable "cura"
+		
+		if(this.estado!=0) {
+		
+			this.hp = this.hp + cura;
+			
+			if(this.hp>this.maxhp) {
+				this.hp=this.maxhp;
+			}
+		}
+	}
+	
+	public void curatotal(Pokemon p) {
+		//si solamente pasas el pokemon se curara al completo
+		
+		if(this.estado!=0) {
+			this.hp=this.maxhp;
+		}
+		
+	}
+	
+	public void debilitado() {
+		
+		this.hp=0;
+		this.estado=0;
+		
+	}
+	
+	public void turnocombate(Pokemon enemigo, Ataques ataque) {
+		// funcion para calcular el de un Pokemon a otro
+		 // aplicas la funcion sobre el Pokemon atacante y 
+		  // le pasas el Pokemon defensor y el numero del ataque que usas (1, 2, 3 o 4)
+		
+		System.out.println("el estado "+this.estado);
+		
+		if(this.estado!=0) {
+		
+		int prioridad = prioridad(this, enemigo);
+		
+		System.out.println("estado "+this.estado);
+		
+		int ataquesalvaje=(int) (Math.random()*4);
+		
+		while(enemigo.ataques[ataquesalvaje].pp<=0) {
+			
+			ataquesalvaje = (int) (Math.random()*4);
+			
+			
+		}
+		
+		//0 debilitado, 1 normal, 2 paralizado, 3 congelado, 4 envenenado, 5 confuso, 6 dormido, 7 quemado
+		switch(prioridad) {
+		case 0:
+			int random=0;
+			if(this.estado==2||this.estado==3||this.estado==5||this.estado==6) {
+				random = (int) (1 + Math.random()*5);
+			}
+			if(random==3) {
+				random=0;
+				this.estado=1;
+			}else {
+				random = (int) (Math.random()*2);
+			}
+			if(random==0) {
+				this.damage(enemigo, this, ataque);
+			}
+			random=0;
+			
+			if(enemigo.hp>0) {
+				if(enemigo.estado==2||enemigo.estado==3||enemigo.estado==5||enemigo.estado==6) {
+					random = (int) (1 + Math.random()*5);
+				}
+				if(random==3) {
+					random=0;
+					enemigo.estado=1;
+				}else {
+					random = (int) (Math.random()*2);
+				}
+				if(random==0) {
+					enemigo.damage(this, enemigo, enemigo.ataques[ataquesalvaje]);
+				}
+			}
+			break;
+		case 1:
+			random=0;
+			if(enemigo.estado==2||enemigo.estado==3||enemigo.estado==5||enemigo.estado==6) {
+				random = (int) (1 + Math.random()*5);
+			}
+			if(random==3) {
+				random=0;
+				enemigo.estado=1;
+			}else {
+				random = (int) (Math.random()*2);
+			}
+			if(random==0) {
+				enemigo.damage(this, enemigo, enemigo.ataques[ataquesalvaje]);
+			}
+			random=0;
+			
+			if(this.hp>0) {
+				if(this.estado==2||this.estado==3||this.estado==5||this.estado==6) {
+					random = (int) (1 + Math.random()*5);
+				}
+				if(random==3) {
+					random=0;
+					this.estado=1;
+				}else {
+					random = (int) (Math.random()*2);
+				}
+				if(random==0) {
+					this.damage(enemigo, this, ataque);
+				}
+			}
+			break;
+		}
+		
+		/// restar vida por veneno
+		System.out.println("vida "+this.hp);
+		if(this.estado==4/*envenenado*/||this.estado==7/*quemado*/) {
+			this.hp = this.hp - (this.hp / 10);
+		}
+		if(this.hp<=0) {
+			this.hp=0;
+			this.estado=0;
+		}
+		if(enemigo.estado==4/*envenenado*/||enemigo.estado==7/*quemado*/) {
+			enemigo.hp = enemigo.hp - (enemigo.hp / 10);
+		}
+		if(enemigo.hp<=0) {
+			enemigo.hp=0;
+			enemigo.estado=0;
+		}
+		System.out.println("vida "+this.hp);
+		
+		}
+	}
+	
+	private int prioridad(Pokemon equipo, Pokemon enemigo) {
+		// devuelve 0 si el Pokemon 1 es mas rapido que el Pokemon 2
+		  // devuelve 1 si el Pokemon 2 es mas rapido que el Pokemon 1
+		    // si tienen la misma velocidad se devolvera 0 o 1 de manera aleatoria
+		
+		int num=0;
+		int spd1=equipo.spd;
+		int spd2=enemigo.spd;
+		
+		if(equipo.estado==2/*paralizado*/) {
+			spd1 = (int) (spd1 - (spd1 * 0.4));
+		}
+		if(enemigo.estado==2/*paralizado*/) {
+			spd2 = (int) (spd2 - (spd2 * 0.4));
+		}
+		
+		if(spd1>spd2) {
+			num = 0;
+		}else if(spd1<spd2) {
+			num = 1;
+		}else if(spd1==spd2) {
+			num = (int) (Math.random()*2);
+		}
+		
+		return num;
+	}
+	
+	private void damage(Pokemon rival, Pokemon equipo, Ataques ataque) {
+		// le pasas un Pokemon i el numero del ataque
+		 // a aprtir de aqui calcula el daño que hace el Pokemon sobre el que haces
+		  // la funcion con el ataque de numero "ataque"(1, 2, 3, o 4) hacia el Pokemon "p"
+		
+		if(ataque.pwr>0) {
+		
+			double debilidad=1;
+			double damage=0;
+			double stab=0;
+			double donedamage=0;
+			
+			int atkd=equipo.atk; int defd=equipo.def;
+			int satkd=equipo.satk; int sdefd=equipo.sdef;
+			int spdd=equipo.spd;
+			
+			switch(equipo.estado) {
+			case 7://quemado
+				atkd= atkd / 2;
+				satkd= satkd / 2;
+				break;
+			}
+			
+			Tablatipos ta = new Tablatipos();
+			
+				if(equipo.type1==ataque.type||equipo.type2==ataque.type) {
+					damage = 1.5;
+				}
+				debilidad = ta.verdebilidad(ataque.type, rival);
+				damage+=debilidad;
+				if(debilidad==0) {
+					damage=0;
+				}
+				if(ataque.cty==0) {
+					 donedamage = (int) ((atkd-rival.def)*damage);
+				}
+				if(ataque.cty==1) {
+					donedamage = (int) ((satkd-rival.sdef)*damage);
+				}
+				if(donedamage<=0) {
+					donedamage = damage+1;
+				}
+				rival.hp = (int) (rival.hp - ((donedamage)/**(this.a4pwr/100)*/));
+				
+		}
+		
+		if(rival.hp<=0) {
+			rival.estado=0;
+		}else {
+			//0 debilitado, 1 normal, 2 paralizado, 3 congelado, 4 envenenado, 5 confuso, 6 dormido, 7 quemado
+			if(ataque.probparalize>=(1 + Math.random()*10)) {
+				rival.estado=2;
+			}
+			if(ataque.probfrozen>=(1 + Math.random()*10)) {
+				rival.estado=3;
+			}
+			if(ataque.probpoison>=(1 + Math.random()*10)) {
+				rival.estado=4;
+			}
+			if(ataque.probconfuse>=(1 + Math.random()*10)) {
+				rival.estado=5;
+			}
+			if(ataque.probsleep>=(1 + Math.random()*10)) {
+				rival.estado=6;
+			}
+			if(ataque.probburn>=(1 + Math.random()*10)) {
+				rival.estado=7;
+			}
+			
+		}
+		
+		
+	}
+	
+	// subida de estadisticas segun la naturaleza
+	public void lvlup() {
+		this.nivel++;
+		
+		switch(this.naturaleza) {
+		case 0: // Fuerte
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 1: // Osada
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * ((90/100));
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 2: // Miedosa
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * ((90/100));
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			break;
+		case 3: // Modesta
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * ((90/100));
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 4: // Serena
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * ((90/100));
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 5: // Huraña
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * ((110/100));
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 6: // Dócil
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 7: // Activa
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			break;
+		case 8: // Afable
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 9: // Amable
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 10: // Audaz
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * ((110/100));
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			break;
+		case 11: // Plácida
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			break;
+		case 12: // Seria
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 13: // Mansa 
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			break;
+		case 14: // Grosera
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * ((110/10));
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			break;
+		case 15: // Firme
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * ((110/100));
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 16: // Agitada
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 17: // Alegre
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			break;
+		case 18: // Tímida
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 19: // Cauta
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 20: // Pícara
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * ((110/100));
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 21: // Floja
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 22: // Ingenua
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1 + 1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * ((110/100));
+			break;
+		case 23: // Alocada
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1 + (110/100));
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * ((90/100));
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		case 24: // Rara
+			this.maxhp = ((((this.hpbase + this.ivhp)*2)*this.nivel)/100) + this.nivel + 10;
+			this.hp = this.maxhp;
+			this.atk = (((((this.ivatk + this.atkbase) * 2/*faltaria añadir ((raiz(EV))/4)*/) * (this.nivel))/100) + 5) * (1);
+			this.satk = (((((this.ivsatk + this.satkbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.def = (((((this.ivdef + this.defbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.sdef = (((((this.ivsdef + this.sdefbase) * 2) * (this.nivel))/100) + 5) * (1);
+			this.spd = (((((this.ivspd + this.spdbase) * 2) * (this.nivel))/100) + 5) * (1);
+			break;
+		}
+		
+		
+	}
+
+	
+	
 	
 	
 }
